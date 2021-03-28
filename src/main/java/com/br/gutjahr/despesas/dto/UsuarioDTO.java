@@ -13,14 +13,14 @@ public class UsuarioDTO implements Serializable {
 
     private Integer id;
     @NotNull(message = "Informe o nome de usuário")
-    @Length(min = 3, message = "Nome precisa ter mais de dois caracteres")
+    @Length(min = 3, message = "Nome precisa ter mais de três caracteres")
     private String nome;
     @Email(message = "E-mail inválido")
     private String email;
     private Date dt_cadastro;
 
     @NotNull(message = "Informe a senha")
-    @Size(min = 6,message = "Senha muito curta")
+    @Size(min = 6, message = "Senha muito curta, minimo de 6 caracteres")
     private String senha;
 
     public UsuarioDTO(){}

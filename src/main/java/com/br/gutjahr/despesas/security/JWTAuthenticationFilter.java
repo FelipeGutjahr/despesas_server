@@ -28,6 +28,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException{
@@ -51,7 +52,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication auth) throws IOException, ServletException {
         String username = ((UserSS) auth.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
-        res.addHeader("Authorization", "Bearer" + token);
+        res.addHeader("Authorization", "Bearer " + token);
     }
 
     private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {

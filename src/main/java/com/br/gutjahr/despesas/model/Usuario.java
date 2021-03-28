@@ -1,7 +1,9 @@
 package com.br.gutjahr.despesas.model;
 
+import com.br.gutjahr.despesas.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -21,17 +24,22 @@ public class Usuario implements Serializable {
     private String email;
     private Date dt_cadastro;
 
+    private Integer perfil;
+
     //anotação para não mostrar a senha criptografada ao buscar o usuário
     @JsonIgnore
     private String senha;
 
-    public Usuario() {}
+    public Usuario() {
+        addPerfil(Perfil.USER_FREE);
+    }
 
     public Usuario(Integer id, String nome, String email, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        addPerfil(Perfil.USER_FREE);
     }
 
     public Integer getId() {
@@ -73,6 +81,10 @@ public class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    public Perfil getPerfil() { return Perfil.toEnum(this.perfil); }
+
+    public void addPerfil(Perfil perfil) { this.perfil = perfil.getCod(); }
 
     @Override
     public boolean equals(Object o) {
