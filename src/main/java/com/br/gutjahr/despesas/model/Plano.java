@@ -1,0 +1,65 @@
+package com.br.gutjahr.despesas.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+public class Plano implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String cod_contabil;
+    private String nome;
+    private boolean dre;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    public Plano(){}
+
+    public Plano(Integer id, String cod_contabil, String nome, boolean dre) {
+        this.id = id;
+        this.cod_contabil = cod_contabil;
+        this.nome = nome;
+        this.dre = dre;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCod_contabil() {
+        return cod_contabil;
+    }
+
+    public void setCod_contabil(String cod_contabil) {
+        this.cod_contabil = cod_contabil;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public boolean isDre() {
+        return dre;
+    }
+
+    public void setDre(boolean dre) {
+        this.dre = dre;
+    }
+}

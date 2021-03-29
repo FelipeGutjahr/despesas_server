@@ -3,13 +3,12 @@ package com.br.gutjahr.despesas.model;
 import com.br.gutjahr.despesas.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,6 +28,14 @@ public class Usuario implements Serializable {
     //anotação para não mostrar a senha criptografada ao buscar o usuário
     @JsonIgnore
     private String senha;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario")
+    private List<Plano> planos = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario")
+    private List<Portador> portadores = new ArrayList<>();
 
     public Usuario() {
         addPerfil(Perfil.USER_FREE);
