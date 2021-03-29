@@ -13,7 +13,7 @@ public class Plano implements Serializable {
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String cod_contabil;
+    private String codContabil;
     private String nome;
     private boolean dre;
 
@@ -26,7 +26,7 @@ public class Plano implements Serializable {
 
     public Plano(Integer id, String cod_contabil, String nome, boolean dre) {
         this.id = id;
-        this.cod_contabil = cod_contabil;
+        this.codContabil = cod_contabil;
         this.nome = nome;
         this.dre = dre;
     }
@@ -40,11 +40,11 @@ public class Plano implements Serializable {
     }
 
     public String getCod_contabil() {
-        return cod_contabil;
+        return codContabil;
     }
 
     public void setCod_contabil(String cod_contabil) {
-        this.cod_contabil = cod_contabil;
+        this.codContabil = cod_contabil;
     }
 
     public String getNome() {
@@ -55,11 +55,19 @@ public class Plano implements Serializable {
         this.nome = nome;
     }
 
-    public boolean isDre() {
+    public boolean setDre() {
         return dre;
     }
 
     public void setDre(boolean dre) {
         this.dre = dre;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
