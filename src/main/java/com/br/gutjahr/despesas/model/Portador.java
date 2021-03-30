@@ -14,6 +14,10 @@ public class Portador implements Serializable {
     private Integer id;
     private String nome;
 
+    @ManyToOne
+    @JoinColumn(name = "plano_id")
+    private Plano plano;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "usuario_id")
