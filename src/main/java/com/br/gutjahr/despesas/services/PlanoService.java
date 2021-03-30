@@ -26,7 +26,8 @@ public class PlanoService {
         if(userSS == null) {
             throw new ArithmeticException("Acesso negado");
         }
-        List<Plano> planos = planoRepository.findAll();
+        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+        List<Plano> planos = planoRepository.findByUsuario(usuario);
         return planos;
     }
 

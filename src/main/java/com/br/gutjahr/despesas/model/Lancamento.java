@@ -11,7 +11,6 @@ public class Lancamento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Date data;
@@ -23,23 +22,23 @@ public class Lancamento implements Serializable {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "plano_credito_id")
     private Plano plano_credito;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "plano_debito_id")
     private Plano plano_debito;
 
     public Lancamento(){}
 
-    public Lancamento(Integer id, Date data, Double valor, String historico) {
+    public Lancamento(Integer id, Date data, Double valor, String historico, Plano plano_credito, Plano plano_debito) {
         this.id = id;
         this.data = data;
         this.valor = valor;
         this.historico = historico;
+        this.plano_credito = plano_credito;
+        this.plano_debito = plano_debito;
     }
 
     public Integer getId() {
