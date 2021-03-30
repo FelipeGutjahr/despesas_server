@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Plano implements Serializable {
@@ -21,6 +23,14 @@ public class Plano implements Serializable {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "plano_credito")
+    private List<Lancamento> lancamentosCredito = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "plano_debito")
+    private List<Lancamento> lancamentosDebito = new ArrayList<>();
 
     public Plano(){}
 
