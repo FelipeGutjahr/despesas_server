@@ -19,20 +19,20 @@ public class LancamentoDTO implements Serializable {
     private String historico;
 
     @NotNull(message = "Informe a conta de débito")
-    private Integer plano_deb_id;
+    private Integer plano_debito_id;
 
     @NotNull(message = "Informe a conta de crédito")
-    private Integer plano_cre_id;
+    private Integer plano_credito_id;
 
     public LancamentoDTO(){}
 
-    public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer plano_deb_id, Integer plano_cre_id) {
+    public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer plano_debito_id, Integer plano_credito_id) {
         this.id = id;
         this.data = data;
         this.valor = valor;
         this.historico = historico;
-        this.plano_deb_id = plano_deb_id;
-        this.plano_cre_id = plano_cre_id;
+        this.plano_debito_id = plano_debito_id;
+        this.plano_credito_id = plano_credito_id;
     }
 
     public Integer getId() {
@@ -67,19 +67,19 @@ public class LancamentoDTO implements Serializable {
         this.historico = historico;
     }
 
-    public Integer getPlano_deb_id() {
-        return plano_deb_id;
+    public Integer getPlano_debito_id() {
+        return plano_debito_id;
     }
 
-    public void setPlano_deb_id(Integer plano_deb_id) {
-        this.plano_deb_id = plano_deb_id;
+    public void setPlano_debito_id(Integer plano_debito_id) {
+        this.plano_debito_id = plano_debito_id;
     }
 
-    public Integer getPlano_cre_id() {
-        return plano_cre_id;
+    public Integer getPlano_credito_id() {
+        return plano_credito_id;
     }
 
-    public void setPlano_cre_id(Integer plano_cre_id) {
-        this.plano_cre_id = plano_cre_id;
+    public void setPlano_credito_id(Integer plano_credito_id) {
+        this.plano_credito_id = plano_credito_id;
     }
 }

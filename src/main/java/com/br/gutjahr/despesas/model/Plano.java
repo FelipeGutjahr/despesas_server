@@ -35,6 +35,10 @@ public class Plano implements Serializable {
     @OneToMany(mappedBy = "plano")
     private List<Portador> portadores = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "plano")
+    private List<PlanoSaldo> planoSaldoList = new ArrayList<>();
+
     public Plano(){}
 
     public Plano(Integer id, String cod_contabil, String nome, boolean dre) {
