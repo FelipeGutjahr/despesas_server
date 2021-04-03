@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -11,11 +12,19 @@ public class PlanoSaldo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(columnDefinition = "DATE")
+    @Temporal(TemporalType.DATE)
     private Date data;
+    @JsonIgnore
+    @Column(precision = 2)
     private Double credito;
+    @JsonIgnore
+    @Column(precision = 2)
     private Double debito;
+    @Column(precision = 2)
     private Double saldo;
 
     @JsonIgnore
@@ -30,6 +39,14 @@ public class PlanoSaldo implements Serializable {
         this.credito = credito;
         this.debito = debito;
         this.saldo = saldo;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Date getData() {
@@ -70,5 +87,17 @@ public class PlanoSaldo implements Serializable {
 
     public void setPlano(Plano plano) {
         this.plano = plano;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Data: ");
+        builder.append(getData());
+        builder.append(", Saldo: ");
+        builder.append(getSaldo());
+        builder.append(", plano_id: ");
+        builder.append(getPlano().getId());
+        return builder.toString();
     }
 }

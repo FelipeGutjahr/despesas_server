@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,9 @@ public class Plano implements Serializable {
     private String codContabil;
     private String nome;
     private boolean dre;
+
+    @Transient
+    private Double saldoAtual;
 
     @JsonIgnore
     @ManyToOne
@@ -41,11 +45,12 @@ public class Plano implements Serializable {
 
     public Plano(){}
 
-    public Plano(Integer id, String cod_contabil, String nome, boolean dre) {
+    public Plano(Integer id, String cod_contabil, String nome, boolean dre, Double saldoAtual) {
         this.id = id;
         this.codContabil = cod_contabil;
         this.nome = nome;
         this.dre = dre;
+        this.saldoAtual = saldoAtual;
     }
 
     public Integer getId() {
@@ -86,5 +91,25 @@ public class Plano implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Double getSaldoAtual() {
+        return saldoAtual;
+    }
+
+    public void setSaldoAtual(Double saldoAtual) {
+        this.saldoAtual = saldoAtual;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Código: ");
+        builder.append(getId());
+        builder.append(", Código contábil: ");
+        builder.append(getCod_contabil());
+        builder.append(", Nome: ");
+        builder.append(getNome());
+        return builder.toString();
     }
 }

@@ -44,13 +44,14 @@ public class LancamentoService {
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
         lancamento.setId(null);
         lancamento.setUsuario(usuario);
+        System.out.println(lancamento.getData());
         lancamentoRepository.save(lancamento);
         return lancamento;
     }
 
     public Lancamento fromDTO(LancamentoDTO lancamentoDTO){
-        Plano planoCred = planoRepository.getOne(lancamentoDTO.getPlano_cre_id());
-        Plano planoDeb = planoRepository.getOne(lancamentoDTO.getPlano_deb_id());
+        Plano planoCred = planoRepository.getOne(lancamentoDTO.getPlano_credito_id());
+        Plano planoDeb = planoRepository.getOne(lancamentoDTO.getPlano_debito_id());
         if(planoCred == null){
             throw new ObjectNotFoundException("Conta de crédito não encontrada");
         }

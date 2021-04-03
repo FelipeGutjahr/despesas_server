@@ -2,15 +2,19 @@ package com.br.gutjahr.despesas.services;
 
 import com.br.gutjahr.despesas.dto.PlanoDTO;
 import com.br.gutjahr.despesas.model.Plano;
+import com.br.gutjahr.despesas.model.PlanoSaldo;
 import com.br.gutjahr.despesas.model.Usuario;
 import com.br.gutjahr.despesas.repositories.PlanoRepository;
+import com.br.gutjahr.despesas.repositories.PlanoSaldoRepository;
 import com.br.gutjahr.despesas.repositories.UsuarioRepository;
 import com.br.gutjahr.despesas.security.UserSS;
 import com.br.gutjahr.despesas.services.exceptions.DataIntegrityExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlanoService {
@@ -20,6 +24,9 @@ public class PlanoService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PlanoSaldoRepository planoSaldoRepository;
 
     public List<Plano> findAll(){
         UserSS userSS = UserService.authencated();
@@ -48,6 +55,6 @@ public class PlanoService {
     }
 
     public Plano fromDTO(PlanoDTO planoDTO){
-        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre());
+        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre(), null);
     }
 }

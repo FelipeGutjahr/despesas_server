@@ -2,6 +2,7 @@ package com.br.gutjahr.despesas.model;
 
 import com.br.gutjahr.despesas.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class Usuario implements Serializable {
     private Integer id;
     private String nome;
     private String email;
+    @Column(columnDefinition = "DATE")
     private Date dt_cadastro;
 
     private Integer perfil;

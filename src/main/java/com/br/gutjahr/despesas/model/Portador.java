@@ -25,9 +25,10 @@ public class Portador implements Serializable {
 
     public Portador() {}
 
-    public Portador(Integer id, String nome) {
+    public Portador(Integer id, String nome, Plano plano) {
         this.id = id;
         this.nome = nome;
+        this.plano = plano;
     }
 
     public Integer getId() {
@@ -44,5 +45,21 @@ public class Portador implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Plano getPlano() {
+        return plano;
+    }
+
+    public void setPlano(Plano plano) {
+        this.plano = plano;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

@@ -2,6 +2,8 @@ package com.br.gutjahr.despesas.dto;
 
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +13,7 @@ public class LancamentoDTO implements Serializable {
 
     private Integer id;
     @NotNull(message = "Informe a data")
+    @Temporal(TemporalType.DATE)
     private Date data;
     @NotNull(message = "Informe o valor")
     private Double valor;
@@ -33,6 +36,7 @@ public class LancamentoDTO implements Serializable {
         this.historico = historico;
         this.plano_debito_id = plano_debito_id;
         this.plano_credito_id = plano_credito_id;
+        System.out.println("Data no objeto: " + data);
     }
 
     public Integer getId() {

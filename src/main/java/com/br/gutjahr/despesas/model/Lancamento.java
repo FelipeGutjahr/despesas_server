@@ -1,6 +1,7 @@
 package com.br.gutjahr.despesas.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +14,10 @@ public class Lancamento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(columnDefinition = "DATE")
+    @Temporal(TemporalType.DATE)
     private Date data;
+    @Column(precision = 2)
     private Double valor;
     private String historico;
 
