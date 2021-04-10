@@ -13,6 +13,8 @@ public class Portador implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+    private boolean credito;
+    private Double limite;
 
     @ManyToOne
     @JoinColumn(name = "plano_id")
@@ -25,10 +27,12 @@ public class Portador implements Serializable {
 
     public Portador() {}
 
-    public Portador(Integer id, String nome, Plano plano) {
+    public Portador(Integer id, String nome, Plano plano, boolean credito, Double limite) {
         this.id = id;
         this.nome = nome;
         this.plano = plano;
+        this.credito = credito;
+        this.limite = limite;
     }
 
     public Integer getId() {
@@ -61,5 +65,21 @@ public class Portador implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public boolean isCredito() {
+        return credito;
+    }
+
+    public void setCredito(boolean credito) {
+        this.credito = credito;
+    }
+
+    public Double getLimite() {
+        return limite;
+    }
+
+    public void setLimite(Double limite) {
+        this.limite = limite;
     }
 }

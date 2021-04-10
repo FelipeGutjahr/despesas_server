@@ -4,7 +4,6 @@ import com.br.gutjahr.despesas.model.Plano;
 import com.br.gutjahr.despesas.model.PlanoSaldo;
 import com.br.gutjahr.despesas.model.Portador;
 import com.br.gutjahr.despesas.model.Usuario;
-import com.br.gutjahr.despesas.repositories.PlanoRepository;
 import com.br.gutjahr.despesas.repositories.PlanoSaldoRepository;
 import com.br.gutjahr.despesas.repositories.PortadorRepository;
 import com.br.gutjahr.despesas.repositories.UsuarioRepository;
@@ -46,14 +45,16 @@ public class PortadorService {
 
             // se o plano saldo na data de hoje for nulo, busca o registro com a maior data
             if(planoSaldo.isEmpty()){
-                planoSaldo = planoSaldoRepository.findTopByPlanoId(portador.getPlano().getId());
+                planoSaldo = planoSaldoRepository
+                        .findTopByDataBeforeAndPlanoIdOrderByDataDesc(dataAtual, portador.getPlano().getId());
+                if(!planoSaldo.isEmpty()){
+                    plano.setSaldoAtual(planoSaldo.get().getSaldo());
+                }
             }
 
             // se o plano saldo continuar nullo, atribui 0
-            if(planoSaldo.isEmpty()){
+            if(plano.getSaldoAtual() == null){
                 plano.setSaldoAtual(0.0);
-            } else {
-                plano.setSaldoAtual(planoSaldo.get().getSaldo());
             }
             portador.setPlano(plano);
         }

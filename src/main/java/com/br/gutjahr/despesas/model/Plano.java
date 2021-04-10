@@ -28,7 +28,7 @@ public class Plano implements Serializable {
     private Usuario usuario;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "plano_credito")
+    @OneToMany(mappedBy = "planoCredito")
     private List<Lancamento> lancamentosCredito = new ArrayList<>();
 
     @JsonIgnore

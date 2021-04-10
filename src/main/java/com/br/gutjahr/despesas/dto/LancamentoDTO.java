@@ -20,6 +20,9 @@ public class LancamentoDTO implements Serializable {
     @NotNull(message = "Informe o histórico")
     @Length(min = 5, max = 200, message = "Histórico deve conter entre 5 e 200 caracteres")
     private String historico;
+    private Boolean is_credito = false;
+    private Boolean is_parcelado = false;
+    private Integer qtd_parcelas = 0;
 
     @NotNull(message = "Informe a conta de débito")
     private Integer plano_debito_id;
@@ -29,14 +32,17 @@ public class LancamentoDTO implements Serializable {
 
     public LancamentoDTO(){}
 
-    public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer plano_debito_id, Integer plano_credito_id) {
+    public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer plano_debito_id,
+                         Integer plano_credito_id, Boolean is_credito, Boolean is_parcelado, Integer qtd_parcelas) {
         this.id = id;
         this.data = data;
         this.valor = valor;
         this.historico = historico;
         this.plano_debito_id = plano_debito_id;
         this.plano_credito_id = plano_credito_id;
-        System.out.println("Data no objeto: " + data);
+        this.is_credito = is_credito;
+        this.is_parcelado = is_parcelado;
+        this.qtd_parcelas = qtd_parcelas;
     }
 
     public Integer getId() {
@@ -85,5 +91,29 @@ public class LancamentoDTO implements Serializable {
 
     public void setPlano_credito_id(Integer plano_credito_id) {
         this.plano_credito_id = plano_credito_id;
+    }
+
+    public Boolean getIs_credito() {
+        return is_credito;
+    }
+
+    public void setIs_credito(Boolean is_credito) {
+        this.is_credito = is_credito;
+    }
+
+    public Boolean getIs_parcelado() {
+        return is_parcelado;
+    }
+
+    public void setIs_parcelado(Boolean is_parcelado) {
+        this.is_parcelado = is_parcelado;
+    }
+
+    public Integer getQtd_parcelas() {
+        return qtd_parcelas;
+    }
+
+    public void setQtd_parcelas(Integer qtd_parcelas) {
+        this.qtd_parcelas = qtd_parcelas;
     }
 }
