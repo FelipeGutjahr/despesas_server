@@ -19,9 +19,6 @@ public class Plano implements Serializable {
     private String nome;
     private boolean dre;
 
-    @Transient
-    private Double saldoAtual;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -32,7 +29,7 @@ public class Plano implements Serializable {
     private List<Lancamento> lancamentosCredito = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "plano_debito")
+    @OneToMany(mappedBy = "planoDebito")
     private List<Lancamento> lancamentosDebito = new ArrayList<>();
 
     @JsonIgnore
@@ -45,12 +42,11 @@ public class Plano implements Serializable {
 
     public Plano(){}
 
-    public Plano(Integer id, String cod_contabil, String nome, boolean dre, Double saldoAtual) {
+    public Plano(Integer id, String cod_contabil, String nome, boolean dre) {
         this.id = id;
         this.codContabil = cod_contabil;
         this.nome = nome;
         this.dre = dre;
-        this.saldoAtual = saldoAtual;
     }
 
     public Integer getId() {
@@ -91,14 +87,6 @@ public class Plano implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Double getSaldoAtual() {
-        return saldoAtual;
-    }
-
-    public void setSaldoAtual(Double saldoAtual) {
-        this.saldoAtual = saldoAtual;
     }
 
     @Override

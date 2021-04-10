@@ -60,7 +60,6 @@ public class LancamentoService {
                 lancamentoRepository.save(lancamento1);
             }
         } else {
-            System.out.println("Data no Service " + lancamento.getData());
             lancamentoRepository.save(lancamento);
         }
         return lancamento;

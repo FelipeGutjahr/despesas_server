@@ -55,6 +55,6 @@ public class PlanoService {
     }
 
     public Plano fromDTO(PlanoDTO planoDTO){
-        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre(), null);
+        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre());
     }
 }

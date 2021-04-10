@@ -22,4 +22,16 @@ public class HomeResourse {
         List<ItemCard> itemCardList = homeService.findTotalPago();
         return ResponseEntity.ok().body(itemCardList);
     }
+
+    @RequestMapping(value = "/recebido", method = RequestMethod.GET)
+    public ResponseEntity<?> findTotalRecebido(){
+        List<ItemCard> itemCardList = homeService.findTotalRecebido();
+        return ResponseEntity.ok().body(itemCardList);
+    }
+
+    @RequestMapping(value = "/portadores", method = RequestMethod.GET)
+    public ResponseEntity<?> findSaldoPortadores(){
+        List<ItemCard> itemCardList = homeService.findSaldoPortadores();
+        return ResponseEntity.ok().body(itemCardList);
+    }
 }

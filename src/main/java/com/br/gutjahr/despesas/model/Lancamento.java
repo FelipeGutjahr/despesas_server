@@ -37,7 +37,7 @@ public class Lancamento implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "plano_debito_id")
-    private Plano plano_debito;
+    private Plano planoDebito;
 
     public Lancamento(){}
 
@@ -48,7 +48,7 @@ public class Lancamento implements Serializable {
         this.valor = valor;
         this.historico = historico;
         this.planoCredito = plano_credito;
-        this.plano_debito = plano_debito;
+        this.planoDebito = plano_debito;
         this.credito = credito;
         this.faturado = faturado;
         this.qtd_parcelas = qtd_parcelas;
@@ -103,11 +103,11 @@ public class Lancamento implements Serializable {
     }
 
     public Plano getPlano_debito() {
-        return plano_debito;
+        return planoDebito;
     }
 
     public void setPlano_debito(Plano plano_debito) {
-        this.plano_debito = plano_debito;
+        this.planoDebito = plano_debito;
     }
 
     public Boolean getCredito() {
