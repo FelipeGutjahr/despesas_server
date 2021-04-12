@@ -16,14 +16,14 @@ public interface LancamentoRepository extends JpaRepository<Lancamento, Integer>
     List<Lancamento> findByUsuario(Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByPlanoCreditoInAndDataAndPlanoDebitoNotIn(Collection<Plano> planos1, Date data, Collection<Plano> planos2);
+    List<Lancamento> findByPlanoCreditoInAndDataAndPlanoDebitoNotInAndUsuario(Collection<Plano> planos1, Date data, Collection<Plano> planos2, Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByPlanoDebitoInAndDataAndPlanoCreditoNotIn(Collection<Plano> planos1, Date data, Collection<Plano> planos2);
+    List<Lancamento> findByPlanoDebitoInAndDataAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data, Collection<Plano> planos2, Usuario usuario);
 
-    @Transactional
-    List<Lancamento> findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotIn(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2);
+    @Transactional(readOnly = true)
+    List<Lancamento> findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
 
-    @Transactional
-    List<Lancamento> findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotIn(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2);
+    @Transactional(readOnly = true)
+    List<Lancamento> findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
 }

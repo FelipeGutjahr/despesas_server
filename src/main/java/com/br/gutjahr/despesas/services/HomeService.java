@@ -26,110 +26,67 @@ public class HomeService {
     @Autowired
     private PlanoSaldoRepository planoSaldoRepository;
 
+    Calendar calendar = Calendar.getInstance();
+
     public List<ItemCard> findTotalPago(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null){
-            throw new ArithmeticException("Acesso negado");
-        }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+        Usuario usuario = findUsuario();
+
+        List<Plano> planos = findPlanoFromPortador(usuario);
+        Date dataAtual = new Date(System.currentTimeMillis());
+
+        List<Lancamento> lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataAndPlanoDebitoNotInAndUsuario(
+                planos, dataAtual, planos, usuario);
 
         List<ItemCard> itemCardList = new ArrayList<>();
 
-        // busca as contas que tem vinculo com portador, que podem ser usadas como despesa
-        List<Portador> portadores = portadorRepository.findByUsuario(usuario);
-        List<Plano> planos = new ArrayList<>();
-        portadores.forEach(portador -> planos.add(portador.getPlano()));
-        List<Lancamento> lancamentos;
-        Double total = 0.0;
-        ItemCard itemCard;
-        Date dataAtual = new Date(System.currentTimeMillis());
+        itemCardList.add(generateItemCard(lancamentos, "Hoje"));
 
-        // busca do gasto na data atual
-        lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataAndPlanoDebitoNotIn(planos, dataAtual, planos);
-        for (Lancamento lancamento : lancamentos) {
-            total = total + lancamento.getValor();
-        }
-        itemCard = new ItemCard("Hoje", total);
-        itemCardList.add(itemCard);
-        total = 0.0;
-
-        // busca o gasto no mês atual
-        Calendar calendar = Calendar.getInstance();
         calendar.setTime(dataAtual);
-
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         Date primeiroDiaMes = calendar.getTime();
-
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date ultimoDiaMes = calendar.getTime();
 
-        lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotIn(planos, primeiroDiaMes, ultimoDiaMes, planos);
-        for (Lancamento lancamento : lancamentos) {
-            total = total + lancamento.getValor();
-        }
-        itemCard = new ItemCard("Este mês", total);
-        itemCardList.add(itemCard);
+        lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotInAndUsuario(
+                planos, primeiroDiaMes, ultimoDiaMes, planos, usuario);
+        itemCardList.add(generateItemCard(lancamentos, "Este mês"));
 
         return itemCardList;
     }
 
     public List<ItemCard> findTotalRecebido(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null){
-            throw new ArithmeticException("Acesso negado");
-        }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+        Usuario usuario = findUsuario();
+
+        List<Plano> planos = findPlanoFromPortador(usuario);
+        Date dataAtual = new Date(System.currentTimeMillis());
+
+        List<Lancamento> lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataAndPlanoCreditoNotInAndUsuario(
+                planos, dataAtual, planos, usuario);
 
         List<ItemCard> itemCardList = new ArrayList<>();
 
-        // busca as contas que tem vinculo com portador, que podem ser usadas como receita
-        List<Portador> portadores = portadorRepository.findByUsuario(usuario);
-        List<Plano> planos = new ArrayList<>();
-        portadores.forEach(portador -> planos.add(portador.getPlano()));
-        List<Lancamento> lancamentos;
-        Double total = 0.0;
-        ItemCard itemCard;
-        Date dataAtual = new Date(System.currentTimeMillis());
+        itemCardList.add(generateItemCard(lancamentos, "Hoje"));
 
-        // busca as receitas na data atual
-        lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataAndPlanoCreditoNotIn(planos, dataAtual, planos);
-        for (Lancamento lancamento : lancamentos) {
-            total = total + lancamento.getValor();
-        }
-        itemCard = new ItemCard("Hoje", total);
-        itemCardList.add(itemCard);
-        total = 0.0;
-
-        // busca o gasto no mês atual
-        Calendar calendar = Calendar.getInstance();
         calendar.setTime(dataAtual);
-
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         Date primeiroDiaMes = calendar.getTime();
-
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date ultimoDiaMes = calendar.getTime();
 
-        lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotIn(planos, primeiroDiaMes, ultimoDiaMes, planos);
-        for (Lancamento lancamento : lancamentos) {
-            total = total + lancamento.getValor();
-        }
-        itemCard = new ItemCard("Este mês", total);
-        itemCardList.add(itemCard);
+        lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotInAndUsuario(
+                planos, primeiroDiaMes, ultimoDiaMes, planos, usuario);
+
+        itemCardList.add(generateItemCard(lancamentos, "Este mês"));
 
         return itemCardList;
     }
 
     public List<ItemCard> findSaldoPortadores(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null){
-            throw new ArithmeticException("Acesso negado");
-        }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
-
-        List<ItemCard> itemCardList = new ArrayList<>();
+        Usuario usuario = findUsuario();
 
         List<Portador> portadores = portadorRepository.findByUsuario(usuario);
+
+        List<ItemCard> itemCardList = new ArrayList<>();
 
         for (Portador portador : portadores) {
             Date dataAtual = new Date(System.currentTimeMillis());
@@ -153,5 +110,28 @@ public class HomeService {
         }
 
         return itemCardList;
+    }
+
+    private List<Plano> findPlanoFromPortador(Usuario usuario){
+        List<Portador> portadores = portadorRepository.findByUsuario(usuario);
+        List<Plano> planos = new ArrayList<>();
+        portadores.forEach(portador -> planos.add(portador.getPlano()));
+        return planos;
+    }
+
+    private ItemCard generateItemCard(List<Lancamento> lancamentos, String title){
+        Double total = 0.0;
+        for (Lancamento lancamento : lancamentos) {
+            total = total + lancamento.getValor();
+        }
+        return new ItemCard(title, total);
+    }
+
+    private Usuario findUsuario(){
+        UserSS userSS = UserService.authencated();
+        if(userSS == null){
+            throw new ArithmeticException("Acesso negado");
+        }
+        return usuarioRepository.getOne(userSS.getId());
     }
 }
