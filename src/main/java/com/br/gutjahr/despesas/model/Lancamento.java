@@ -39,10 +39,15 @@ public class Lancamento implements Serializable {
     @JoinColumn(name = "plano_debito_id")
     private Plano planoDebito;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "duplicata_id")
+    private Duplicata duplicata;
+
     public Lancamento(){}
 
     public Lancamento(Integer id, Date data, Double valor, String historico, Plano plano_credito, Plano plano_debito,
-                      Boolean credito, Boolean faturado, Integer qtd_parcelas) {
+                      Boolean credito, Boolean faturado, Integer qtd_parcelas, Duplicata duplicata) {
         this.id = id;
         this.data = data;
         this.valor = valor;
@@ -52,6 +57,7 @@ public class Lancamento implements Serializable {
         this.credito = credito;
         this.faturado = faturado;
         this.qtd_parcelas = qtd_parcelas;
+        this.duplicata = duplicata;
     }
 
     public Integer getId() {
@@ -132,6 +138,30 @@ public class Lancamento implements Serializable {
 
     public void setQtd_parcelas(Integer qtd_parcelas) {
         this.qtd_parcelas = qtd_parcelas;
+    }
+
+    public Plano getPlanoCredito() {
+        return planoCredito;
+    }
+
+    public void setPlanoCredito(Plano planoCredito) {
+        this.planoCredito = planoCredito;
+    }
+
+    public Plano getPlanoDebito() {
+        return planoDebito;
+    }
+
+    public void setPlanoDebito(Plano planoDebito) {
+        this.planoDebito = planoDebito;
+    }
+
+    public Duplicata getDuplicata() {
+        return duplicata;
+    }
+
+    public void setDuplicata(Duplicata duplicata) {
+        this.duplicata = duplicata;
     }
 
     @Override

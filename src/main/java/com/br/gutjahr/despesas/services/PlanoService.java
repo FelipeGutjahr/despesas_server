@@ -34,7 +34,7 @@ public class PlanoService {
             throw new ArithmeticException("Acesso negado");
         }
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        List<Plano> planos = planoRepository.findByUsuario(usuario);
+        List<Plano> planos = planoRepository.findByUsuarioOrderByCodContabil(usuario);
         return planos;
     }
 
@@ -50,11 +50,25 @@ public class PlanoService {
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
         plano.setId(null);
         plano.setUsuario(usuario);
+        for(int i=1;i<plano.getCod_contabil().length();i++){
+            plano.setNome(' ' + plano.getNome());
+        }
         planoRepository.save(plano);
         return plano;
     }
 
     public Plano fromDTO(PlanoDTO planoDTO){
-        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre());
+        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre(),
+                getNivel(planoDTO.getCod_contabil()));
+    }
+
+    private Integer getNivel(String codContabil){
+        Integer nivel = 0;
+        for(int i=0;i<codContabil.length();i++){
+            if(codContabil.charAt(i) == '.'){
+                nivel++;
+            }
+        }
+        return nivel;
     }
 }

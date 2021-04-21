@@ -23,6 +23,7 @@ public class LancamentoDTO implements Serializable {
     private Boolean is_credito = false;
     private Boolean is_parcelado = false;
     private Integer qtd_parcelas = 0;
+    private Integer duplicata_id;
 
     @NotNull(message = "Informe a conta de débito")
     private Integer plano_debito_id;
@@ -33,7 +34,8 @@ public class LancamentoDTO implements Serializable {
     public LancamentoDTO(){}
 
     public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer plano_debito_id,
-                         Integer plano_credito_id, Boolean is_credito, Boolean is_parcelado, Integer qtd_parcelas) {
+                         Integer plano_credito_id, Boolean is_credito, Boolean is_parcelado, Integer qtd_parcelas,
+                         Integer duplicata_id) {
         this.id = id;
         this.data = data;
         this.valor = valor;
@@ -43,6 +45,7 @@ public class LancamentoDTO implements Serializable {
         this.is_credito = is_credito;
         this.is_parcelado = is_parcelado;
         this.qtd_parcelas = qtd_parcelas;
+        this.duplicata_id = duplicata_id;
     }
 
     public Integer getId() {
@@ -115,5 +118,13 @@ public class LancamentoDTO implements Serializable {
 
     public void setQtd_parcelas(Integer qtd_parcelas) {
         this.qtd_parcelas = qtd_parcelas;
+    }
+
+    public Integer getDuplicata_id() {
+        return duplicata_id;
+    }
+
+    public void setDuplicata_id(Integer duplicata_id) {
+        this.duplicata_id = duplicata_id;
     }
 }

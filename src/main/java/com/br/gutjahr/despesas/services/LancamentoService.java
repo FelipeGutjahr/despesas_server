@@ -1,9 +1,11 @@
 package com.br.gutjahr.despesas.services;
 
 import com.br.gutjahr.despesas.dto.LancamentoDTO;
+import com.br.gutjahr.despesas.model.Duplicata;
 import com.br.gutjahr.despesas.model.Lancamento;
 import com.br.gutjahr.despesas.model.Plano;
 import com.br.gutjahr.despesas.model.Usuario;
+import com.br.gutjahr.despesas.repositories.DuplicataRepository;
 import com.br.gutjahr.despesas.repositories.LancamentoRepository;
 import com.br.gutjahr.despesas.repositories.PlanoRepository;
 import com.br.gutjahr.despesas.repositories.UsuarioRepository;
@@ -26,6 +28,9 @@ public class LancamentoService {
 
     @Autowired
     private PlanoRepository planoRepository;
+
+    @Autowired
+    private DuplicataRepository duplicataRepository;
 
     public List<Lancamento> findAll(){
         UserSS userSS = UserService.authencated();
@@ -55,7 +60,8 @@ public class LancamentoService {
                 calendar.add(Calendar.MONTH, i);
                 Lancamento lancamento1 = new Lancamento(null, calendar.getTime(), lancamento.getValor(),
                         lancamento.getHistorico(), lancamento.getPlano_credito(), lancamento.getPlano_debito(),
-                        lancamento.getCredito(), lancamento.getFaturado(), lancamento.getQtd_parcelas());
+                        lancamento.getCredito(), lancamento.getFaturado(), lancamento.getQtd_parcelas(),
+                        lancamento.getDuplicata());
                 lancamento1.setUsuario(usuario);
                 lancamentoRepository.save(lancamento1);
             }
@@ -68,22 +74,18 @@ public class LancamentoService {
     public Lancamento fromDTO(LancamentoDTO lancamentoDTO){
         Plano planoCred = planoRepository.getOne(lancamentoDTO.getPlano_credito_id());
         Plano planoDeb = planoRepository.getOne(lancamentoDTO.getPlano_debito_id());
-        if(planoCred == null){
-            throw new ObjectNotFoundException("Conta de crédito não encontrada");
-        }
-        if(planoDeb == null){
-            throw new ObjectNotFoundException("Conta de débito não encontrada");
-        }
+        Duplicata duplicata = new Duplicata();
+        if(planoCred == null) throw new ObjectNotFoundException("Conta de crédito não encontrada");
+        if(planoDeb == null) throw new ObjectNotFoundException("Conta de débito não encontrada");
 
-        /* ao salvar o lançamento, a data estava atrasando em um dia, não foi encontrada uma forma de ajustar
-        * o erro, então está sendo adicionado um dia antes de salvar o lançamento, mais tarde o problema pode ser
-        * analisado novamente para encontrar uma lolução mais amigável */
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(lancamentoDTO.getData());
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        if(lancamentoDTO.getDuplicata_id() != null) {
+            duplicata = duplicataRepository.getOne(lancamentoDTO.getDuplicata_id());
+        } else {
+            duplicata = null;
+        };
 
-        return new Lancamento(lancamentoDTO.getId(), calendar.getTime(), lancamentoDTO.getValor(),
+        return new Lancamento(lancamentoDTO.getId(), lancamentoDTO.getData(), lancamentoDTO.getValor(),
                 lancamentoDTO.getHistorico(), planoCred, planoDeb, lancamentoDTO.getIs_credito(), false,
-                lancamentoDTO.getQtd_parcelas());
+                lancamentoDTO.getQtd_parcelas(), duplicata);
     }
 }

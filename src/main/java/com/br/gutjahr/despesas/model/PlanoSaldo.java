@@ -18,12 +18,6 @@ public class PlanoSaldo implements Serializable {
     @Column(columnDefinition = "DATE")
     @Temporal(TemporalType.DATE)
     private Date data;
-    @JsonIgnore
-    @Column(precision = 2)
-    private Double credito;
-    @JsonIgnore
-    @Column(precision = 2)
-    private Double debito;
     @Column(precision = 2)
     private Double saldo;
 
@@ -34,10 +28,8 @@ public class PlanoSaldo implements Serializable {
 
     public PlanoSaldo(){};
 
-    public PlanoSaldo(Date data, Double credito, Double debito, Double saldo) {
+    public PlanoSaldo(Date data, Double saldo) {
         this.data = data;
-        this.credito = credito;
-        this.debito = debito;
         this.saldo = saldo;
     }
 
@@ -55,22 +47,6 @@ public class PlanoSaldo implements Serializable {
 
     public void setData(Date data) {
         this.data = data;
-    }
-
-    public Double getCredito() {
-        return credito;
-    }
-
-    public void setCredito(Double credito) {
-        this.credito = credito;
-    }
-
-    public Double getDebito() {
-        return debito;
-    }
-
-    public void setDebito(Double debito) {
-        this.debito = debito;
     }
 
     public Double getSaldo() {

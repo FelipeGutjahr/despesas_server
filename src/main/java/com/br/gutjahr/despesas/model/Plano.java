@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +17,7 @@ public class Plano implements Serializable {
     private String codContabil;
     private String nome;
     private boolean dre;
+    private Integer nivel;
 
     @JsonIgnore
     @ManyToOne
@@ -40,13 +40,18 @@ public class Plano implements Serializable {
     @OneToMany(mappedBy = "plano")
     private List<PlanoSaldo> planoSaldoList = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "plano")
+    private List<PlanoPai> planoPaiList = new ArrayList<>();
+
     public Plano(){}
 
-    public Plano(Integer id, String cod_contabil, String nome, boolean dre) {
+    public Plano(Integer id, String cod_contabil, String nome, boolean dre, Integer nivel) {
         this.id = id;
         this.codContabil = cod_contabil;
         this.nome = nome;
         this.dre = dre;
+        this.nivel = nivel;
     }
 
     public Integer getId() {
@@ -87,6 +92,14 @@ public class Plano implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Integer getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(Integer nivel) {
+        this.nivel = nivel;
     }
 
     @Override

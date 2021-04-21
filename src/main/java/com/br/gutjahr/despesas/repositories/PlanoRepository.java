@@ -13,5 +13,5 @@ public interface PlanoRepository extends JpaRepository<Plano, Integer> {
     Plano findByCodContabilAndUsuarioId(String cod_contabil, Integer usuario_id);
 
     @Transactional(readOnly = true)
-    List<Plano> findByUsuario(Usuario usuario);
+    List<Plano> findByUsuarioOrderByCodContabil(Usuario usuario);
 }
