@@ -26,4 +26,7 @@ public interface LancamentoRepository extends JpaRepository<Lancamento, Integer>
 
     @Transactional(readOnly = true)
     List<Lancamento> findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
+
+    @Transactional(readOnly = true)
+    List<Lancamento> findByDataBetweenAndUsuario(Date data1, Date data2, Usuario usuario);
 }

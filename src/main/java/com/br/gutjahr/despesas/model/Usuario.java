@@ -46,6 +46,9 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "usuario")
     private List<Duplicata> duplicatas = new ArrayList<>();
 
+    @OneToOne(mappedBy = "usuario")
+    private UsuarioConfig usuarioConfig;
+
     public Usuario() {
         addPerfil(Perfil.USER_FREE);
     }
@@ -101,6 +104,14 @@ public class Usuario implements Serializable {
     public Perfil getPerfil() { return Perfil.toEnum(this.perfil); }
 
     public void addPerfil(Perfil perfil) { this.perfil = perfil.getCod(); }
+
+    public UsuarioConfig getUsuarioConfig() {
+        return usuarioConfig;
+    }
+
+    public void setUsuarioConfig(UsuarioConfig usuarioConfig) {
+        this.usuarioConfig = usuarioConfig;
+    }
 
     @Override
     public boolean equals(Object o) {
