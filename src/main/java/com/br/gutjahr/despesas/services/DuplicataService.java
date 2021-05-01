@@ -90,11 +90,14 @@ public class DuplicataService {
 
         Pessoa pessoa;
 
+        // se for informado o código da pessoa, o registro é buscado para ser vinculado a duplicata
         if(duplicataDTO.getPessoa_id() != null){
             pessoa = pessoaRepository.getOne(duplicataDTO.getPessoa_id());
         } else {
+            // se for informado somente o nome, é feita a busca pelo nome
             pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(duplicataDTO.getPessoaNome(), usuario);
 
+            // caso a pessoa não esteja cadastrada, é feito o cadastro
             if(pessoa == null) {
                 Pessoa pessoa1 = new Pessoa(null, duplicataDTO.getPessoaNome());
                 pessoa1.setUsuario(usuario);
