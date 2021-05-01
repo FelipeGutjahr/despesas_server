@@ -49,6 +49,10 @@ public class Usuario implements Serializable {
     @OneToOne(mappedBy = "usuario")
     private UsuarioConfig usuarioConfig;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario")
+    private List<Pessoa> pessoas = new ArrayList<>();
+
     public Usuario() {
         addPerfil(Perfil.USER_FREE);
     }

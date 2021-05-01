@@ -20,23 +20,29 @@ public class DuplicataDTO implements Serializable {
 
     private Double valor;
     private String observacao;
-    private boolean aReceber;
+    private Boolean receber;
 
     private Integer portador_id;
     private Integer plano_id;
 
+    @NotNull(message = "Informe o nome da pessoa")
+    private String pessoaNome;
+    private Integer pessoa_id;
+
     public DuplicataDTO() {}
 
     public DuplicataDTO(Integer id, Date dataInclusao, Date dataVencimento, Double valor, String observacao,
-                        boolean aReceber, Integer portador_id, Integer plano_id) {
+                        Boolean receber, Integer portador_id, Integer plano_id, Integer pessoa_id, String pessoaNome) {
         this.id = id;
         this.dataInclusao = dataInclusao;
         this.dataVencimento = dataVencimento;
         this.valor = valor;
         this.observacao = observacao;
-        this.aReceber = aReceber;
+        this.receber = receber;
         this.portador_id = portador_id;
         this.plano_id = plano_id;
+        this.pessoa_id = pessoa_id;
+        this.pessoaNome = pessoaNome;
     }
 
     public Integer getId() {
@@ -79,12 +85,12 @@ public class DuplicataDTO implements Serializable {
         this.observacao = observacao;
     }
 
-    public boolean isaReceber() {
-        return aReceber;
+    public Boolean getReceber() {
+        return receber;
     }
 
-    public void setaReceber(boolean aReceber) {
-        this.aReceber = aReceber;
+    public void setReceber(Boolean receber) {
+        this.receber = receber;
     }
 
     public Integer getPortador_id() {
@@ -101,5 +107,21 @@ public class DuplicataDTO implements Serializable {
 
     public void setPlano_id(Integer plano_id) {
         this.plano_id = plano_id;
+    }
+
+    public String getPessoaNome() {
+        return pessoaNome;
+    }
+
+    public void setPessoaNome(String pessoaNome) {
+        this.pessoaNome = pessoaNome;
+    }
+
+    public Integer getPessoa_id() {
+        return pessoa_id;
+    }
+
+    public void setPessoa_id(Integer pessoa_id) {
+        this.pessoa_id = pessoa_id;
     }
 }

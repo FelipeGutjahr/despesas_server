@@ -74,7 +74,7 @@ public class LancamentoService {
     public Lancamento fromDTO(LancamentoDTO lancamentoDTO){
         Plano planoCred = planoRepository.getOne(lancamentoDTO.getPlano_credito_id());
         Plano planoDeb = planoRepository.getOne(lancamentoDTO.getPlano_debito_id());
-        Duplicata duplicata = new Duplicata();
+        Duplicata duplicata;
         if(planoCred == null) throw new ObjectNotFoundException("Conta de crédito não encontrada");
         if(planoDeb == null) throw new ObjectNotFoundException("Conta de débito não encontrada");
 

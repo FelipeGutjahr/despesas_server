@@ -1,6 +1,8 @@
 package com.br.gutjahr.despesas.resourses;
 
 import com.br.gutjahr.despesas.model.Portador;
+import com.br.gutjahr.despesas.repositories.PlanoRepository;
+import com.br.gutjahr.despesas.services.LancamentoService;
 import com.br.gutjahr.despesas.services.PortadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

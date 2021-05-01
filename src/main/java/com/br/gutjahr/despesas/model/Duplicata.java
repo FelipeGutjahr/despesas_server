@@ -26,7 +26,7 @@ public class Duplicata implements Serializable {
     @Column(scale = 2)
     private Double saldo;
     private String observacao;
-    private boolean aReceber;
+    private Boolean receber;
 
     @JsonIgnore
     @ManyToOne
@@ -44,19 +44,24 @@ public class Duplicata implements Serializable {
     @OneToMany(mappedBy = "duplicata")
     private List<Lancamento> lancamentos = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
+
     public Duplicata(){}
 
     public Duplicata(Integer id, Date dataInclusao, Date dataVencimento, Double valor, String observacao,
-                     boolean aReceber, Portador portador, Plano plano, Double saldo) {
+                     Boolean receber, Portador portador, Plano plano, Double saldo, Pessoa pessoa) {
         this.id = id;
         this.dataInclusao = dataInclusao;
         this.dataVencimento = dataVencimento;
         this.valor = valor;
         this.observacao = observacao;
-        this.aReceber = aReceber;
+        this.receber = receber;
         this.portador = portador;
         this.plano = plano;
         this.saldo = saldo;
+        this.pessoa = pessoa;
     }
 
     public Integer getId() {
@@ -99,12 +104,12 @@ public class Duplicata implements Serializable {
         this.observacao = observacao;
     }
 
-    public boolean isaReceber() {
-        return aReceber;
+    public Boolean getReceber() {
+        return receber;
     }
 
-    public void setaReceber(boolean aReceber) {
-        this.aReceber = aReceber;
+    public void setReceber(Boolean receber) {
+        this.receber = receber;
     }
 
     public Portador getPortador() {
@@ -137,5 +142,13 @@ public class Duplicata implements Serializable {
 
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 }
