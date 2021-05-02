@@ -97,10 +97,10 @@ public class HomeService {
                     .findByDataAndPlanoId(dataAtual, portador.getPlano().getId());
 
             // se o plano saldo na data de hoje for nulo, busca o registro com a maior data
-            if(planoSaldo.isEmpty()){
+            if(planoSaldo.isPresent()){
                 planoSaldo = planoSaldoRepository
                         .findTopByDataBeforeAndPlanoIdOrderByDataDesc(dataAtual, portador.getPlano().getId());
-                if(!planoSaldo.isEmpty()){
+                if(!planoSaldo.isPresent()){
                     itemCard.setValue(planoSaldo.get().getSaldo());
                 }
             } else {

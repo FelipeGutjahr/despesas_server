@@ -31,7 +31,7 @@ public class UsuarioService {
     }
 
     public Usuario insert(Usuario usuario){
-        if(!usuarioRepository.findByEmail(usuario.getEmail()).isEmpty()){
+        if(!usuarioRepository.findByEmail(usuario.getEmail()).get().getEmail().isEmpty()){
             throw new DataIntegrityExeption("E-mail já cadastrado");
         }
         usuario.setId(null);
