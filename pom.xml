@@ -9,6 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.br.gutjahr</groupId>
+	<packaging>jar</packaging>
 	<artifactId>despesas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>despesas</name>
