@@ -104,7 +104,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.mypackage.MyClass</mainClass>
+							<mainClass>com.br.gutjahr.despesas.DespesasApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
