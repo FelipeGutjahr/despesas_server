@@ -13,9 +13,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>despesas</name>
 	<description>API para controle de despesas</description>
-	<properties>
-		<java.version>11</java.version>
-	</properties>
 	<dependencies>
 		<!-- dependência para projeto web (adicionada ao criar projeto no spring initializr) -->
 		<dependency>
