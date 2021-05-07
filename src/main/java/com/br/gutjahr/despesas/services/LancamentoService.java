@@ -1,14 +1,8 @@
 package com.br.gutjahr.despesas.services;
 
 import com.br.gutjahr.despesas.dto.LancamentoDTO;
-import com.br.gutjahr.despesas.model.Duplicata;
-import com.br.gutjahr.despesas.model.Lancamento;
-import com.br.gutjahr.despesas.model.Plano;
-import com.br.gutjahr.despesas.model.Usuario;
-import com.br.gutjahr.despesas.repositories.DuplicataRepository;
-import com.br.gutjahr.despesas.repositories.LancamentoRepository;
-import com.br.gutjahr.despesas.repositories.PlanoRepository;
-import com.br.gutjahr.despesas.repositories.UsuarioRepository;
+import com.br.gutjahr.despesas.model.*;
+import com.br.gutjahr.despesas.repositories.*;
 import com.br.gutjahr.despesas.security.UserSS;
 import com.br.gutjahr.despesas.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +25,9 @@ public class LancamentoService {
 
     @Autowired
     private DuplicataRepository duplicataRepository;
+
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
     public List<Lancamento> findAll(){
         UserSS userSS = UserService.authencated();
@@ -61,7 +58,7 @@ public class LancamentoService {
                 Lancamento lancamento1 = new Lancamento(null, calendar.getTime(), lancamento.getValor(),
                         lancamento.getHistorico(), lancamento.getPlano_credito(), lancamento.getPlano_debito(),
                         lancamento.getCredito(), lancamento.getFaturado(), lancamento.getQtd_parcelas(),
-                        lancamento.getDuplicata());
+                        lancamento.getDuplicata(), lancamento.getPessoa());
                 lancamento1.setUsuario(usuario);
                 lancamentoRepository.save(lancamento1);
             }
@@ -82,10 +79,31 @@ public class LancamentoService {
             duplicata = duplicataRepository.getOne(lancamentoDTO.getDuplicata_id());
         } else {
             duplicata = null;
-        };
+        }
+
+        UserSS userSS = UserService.authencated();
+        if(userSS == null) throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
+        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+
+        Pessoa pessoa;
+
+        // se for informado o código da pessoa, o registro é buscado para ser vinculado a duplicata
+        if(lancamentoDTO.getPessoa_id() != null){
+            pessoa = pessoaRepository.getOne(lancamentoDTO.getPessoa_id());
+        } else {
+            // se for informado somente o nome, é feita a busca pelo nome
+            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(lancamentoDTO.getNome_pessoa(), usuario);
+
+            // caso a pessoa não esteja cadastrada, é feito o cadastro
+            if(pessoa == null) {
+                Pessoa pessoa1 = new Pessoa(null, lancamentoDTO.getNome_pessoa());
+                pessoa1.setUsuario(usuario);
+                pessoa = pessoaRepository.save(pessoa1);
+            }
+        }
 
         return new Lancamento(lancamentoDTO.getId(), lancamentoDTO.getData(), lancamentoDTO.getValor(),
                 lancamentoDTO.getHistorico(), planoCred, planoDeb, lancamentoDTO.getIs_credito(), false,
-                lancamentoDTO.getQtd_parcelas(), duplicata);
+                lancamentoDTO.getQtd_parcelas(), duplicata, pessoa);
     }
 }

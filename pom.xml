@@ -11,6 +11,7 @@
 	<groupId>com.br.gutjahr</groupId>
 	<artifactId>despesas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>despesas</name>
 	<description>API para controle de despesas</description>
 	<dependencies>

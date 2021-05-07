@@ -34,8 +34,8 @@ public class PlanoService {
             throw new ArithmeticException("Acesso negado");
         }
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        List<Plano> planos = planoRepository.findByUsuarioOrderByCodContabil(usuario);
-        return planos;
+        Optional<List<Plano>> planos = planoRepository.findByUsuarioOrderByCodContabil(usuario);
+        return planos.orElse(null);
     }
 
     public Plano insert(Plano plano){
@@ -43,7 +43,7 @@ public class PlanoService {
         if(userSS == null) {
             throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
         }
-        Plano plano1 = planoRepository.findByCodContabilAndUsuarioId(plano.getCod_contabil(), userSS.getId());
+        Optional<Plano> plano1 = planoRepository.findByCodContabilAndUsuarioId(plano.getCod_contabil(), userSS.getId());
         if(plano1 != null) {
             throw new DataIntegrityExeption("Código contábil já cadastrado");
         }
@@ -55,6 +55,18 @@ public class PlanoService {
         }
         planoRepository.save(plano);
         return plano;
+    }
+
+    public Plano update(Plano plano){
+        Plano newPlano = planoRepository.getOne(plano.getId());
+        newPlano.setCod_contabil(plano.getCod_contabil());
+        newPlano.setNome(plano.getNome());
+        newPlano.setDre(plano.getDre());
+        newPlano.setNivel(plano.getNivel());
+        for(int i=1;i<plano.getCod_contabil().length();i++){
+            newPlano.setNome(' ' + newPlano.getNome());
+        }
+        return planoRepository.save(newPlano);
     }
 
     public Plano fromDTO(PlanoDTO planoDTO){

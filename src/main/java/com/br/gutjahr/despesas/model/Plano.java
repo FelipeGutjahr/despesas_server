@@ -78,7 +78,7 @@ public class Plano implements Serializable {
         this.nome = nome;
     }
 
-    public boolean setDre() {
+    public boolean getDre() {
         return dre;
     }
 

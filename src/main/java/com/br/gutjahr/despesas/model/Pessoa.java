@@ -21,6 +21,10 @@ public class Pessoa implements Serializable {
     private List<Duplicata> duplicatas = new ArrayList<>();
 
     @JsonIgnore
+    @OneToMany(mappedBy = "pessoa")
+    private List<Lancamento> lancamentos = new ArrayList<>();
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;

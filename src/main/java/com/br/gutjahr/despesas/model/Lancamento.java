@@ -44,10 +44,14 @@ public class Lancamento implements Serializable {
     @JoinColumn(name = "duplicata_id")
     private Duplicata duplicata;
 
+    @ManyToOne
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
+
     public Lancamento(){}
 
     public Lancamento(Integer id, Date data, Double valor, String historico, Plano plano_credito, Plano plano_debito,
-                      Boolean credito, Boolean faturado, Integer qtd_parcelas, Duplicata duplicata) {
+                      Boolean credito, Boolean faturado, Integer qtd_parcelas, Duplicata duplicata, Pessoa pessoa) {
         this.id = id;
         this.data = data;
         this.valor = valor;
@@ -58,6 +62,7 @@ public class Lancamento implements Serializable {
         this.faturado = faturado;
         this.qtd_parcelas = qtd_parcelas;
         this.duplicata = duplicata;
+        this.pessoa = pessoa;
     }
 
     public Integer getId() {
@@ -162,6 +167,14 @@ public class Lancamento implements Serializable {
 
     public void setDuplicata(Duplicata duplicata) {
         this.duplicata = duplicata;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     @Override

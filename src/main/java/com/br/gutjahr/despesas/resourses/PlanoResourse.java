@@ -36,4 +36,12 @@ public class PlanoResourse {
                 .path("/{id}").buildAndExpand(plano.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@Valid @RequestBody PlanoDTO planoDTO, @PathVariable Integer id){
+        Plano plano = planoService.fromDTO(planoDTO);
+        plano.setId(id);
+        planoService.update(plano);
+        return ResponseEntity.ok().build();
+    }
 }
