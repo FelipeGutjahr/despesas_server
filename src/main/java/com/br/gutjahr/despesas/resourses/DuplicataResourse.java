@@ -1,7 +1,9 @@
 package com.br.gutjahr.despesas.resourses;
 
 import com.br.gutjahr.despesas.dto.DuplicataDTO;
+import com.br.gutjahr.despesas.dto.PlanoDTO;
 import com.br.gutjahr.despesas.model.Duplicata;
+import com.br.gutjahr.despesas.model.Plano;
 import com.br.gutjahr.despesas.services.DuplicataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +45,13 @@ public class DuplicataResourse {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(duplicata.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@Valid @RequestBody DuplicataDTO duplicataDTO, @PathVariable Integer id){
+        Duplicata duplicata = duplicataService.fromDTO(duplicataDTO);
+        duplicata.setId(id);
+        duplicataService.update(duplicata);
+        return ResponseEntity.ok().build();
     }
 }

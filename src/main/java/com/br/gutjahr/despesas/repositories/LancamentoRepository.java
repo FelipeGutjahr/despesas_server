@@ -1,5 +1,6 @@
 package com.br.gutjahr.despesas.repositories;
 
+import com.br.gutjahr.despesas.model.Duplicata;
 import com.br.gutjahr.despesas.model.Lancamento;
 import com.br.gutjahr.despesas.model.Plano;
 import com.br.gutjahr.despesas.model.Usuario;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface LancamentoRepository extends JpaRepository<Lancamento, Integer> {
 
@@ -29,4 +31,6 @@ public interface LancamentoRepository extends JpaRepository<Lancamento, Integer>
 
     @Transactional(readOnly = true)
     List<Lancamento> findByDataBetweenAndUsuario(Date data1, Date data2, Usuario usuario);
+
+    Optional<List<Lancamento>> findByDuplicata(Duplicata duplicata);
 }

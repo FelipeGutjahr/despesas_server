@@ -26,13 +26,13 @@ public class DuplicataDTO implements Serializable {
     private Integer plano_id;
 
     @NotNull(message = "Informe o nome da pessoa")
-    private String pessoaNome;
+    private String pessoa_nome;
     private Integer pessoa_id;
 
     public DuplicataDTO() {}
 
     public DuplicataDTO(Integer id, Date dataInclusao, Date dataVencimento, Double valor, String observacao,
-                        Boolean receber, Integer portador_id, Integer plano_id, Integer pessoa_id, String pessoaNome) {
+                        Boolean receber, Integer portador_id, Integer plano_id, Integer pessoa_id, String pessoa_nome) {
         this.id = id;
         this.dataInclusao = dataInclusao;
         this.dataVencimento = dataVencimento;
@@ -42,7 +42,7 @@ public class DuplicataDTO implements Serializable {
         this.portador_id = portador_id;
         this.plano_id = plano_id;
         this.pessoa_id = pessoa_id;
-        this.pessoaNome = pessoaNome;
+        this.pessoa_nome = pessoa_nome;
     }
 
     public Integer getId() {
@@ -109,12 +109,12 @@ public class DuplicataDTO implements Serializable {
         this.plano_id = plano_id;
     }
 
-    public String getPessoaNome() {
-        return pessoaNome;
+    public String getPessoa_nome() {
+        return pessoa_nome;
     }
 
-    public void setPessoaNome(String pessoaNome) {
-        this.pessoaNome = pessoaNome;
+    public void setPessoa_nome(String pessoa_nome) {
+        this.pessoa_nome = pessoa_nome;
     }
 
     public Integer getPessoa_id() {

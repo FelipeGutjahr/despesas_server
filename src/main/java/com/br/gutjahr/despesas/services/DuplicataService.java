@@ -4,6 +4,7 @@ import com.br.gutjahr.despesas.dto.DuplicataDTO;
 import com.br.gutjahr.despesas.model.*;
 import com.br.gutjahr.despesas.repositories.*;
 import com.br.gutjahr.despesas.security.UserSS;
+import com.br.gutjahr.despesas.services.exceptions.DataIntegrityExeption;
 import com.br.gutjahr.despesas.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class DuplicataService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private LancamentoRepository lancamentoRepository;
 
     public List<Duplicata> findAll(){
         UserSS userSS = UserService.authencated();
@@ -78,6 +82,32 @@ public class DuplicataService {
         return duplicata;
     }
 
+    public Duplicata update(Duplicata duplicata){
+        Duplicata newDuplicata = duplicataRepository.getOne(duplicata.getId());
+
+        // valida se a duplicata possí baixas e se está sendo alterado o valor
+        if(!lancamentoRepository.findByDuplicata(newDuplicata).get().isEmpty()
+                && duplicata.getValor() != newDuplicata.getValor() ){
+            System.out.println(lancamentoRepository.findByDuplicata(newDuplicata));
+            throw new DataIntegrityExeption("A duplicata possuí baixas, exclua as baixas antes de alterar o valor");
+        }
+
+        // se a data de inclusão não foi informada, é sem recebimento previsto
+        if(duplicata.getDataVencimento() == null) newDuplicata.setDataVencimento(null);
+        else newDuplicata.setDataVencimento(duplicata.getDataVencimento());
+
+        newDuplicata.setDataInclusao(duplicata.getDataInclusao());
+        newDuplicata.setValor(duplicata.getValor());
+        newDuplicata.setSaldo(duplicata.getSaldo());
+        newDuplicata.setObservacao(duplicata.getObservacao());
+        newDuplicata.setReceber(duplicata.getReceber());
+        newDuplicata.setPortador(duplicata.getPortador());
+        newDuplicata.setPlano(duplicata.getPlano());
+        newDuplicata.setPessoa(duplicata.getPessoa());
+
+        return duplicataRepository.save(newDuplicata);
+    }
+
     public Duplicata fromDTO(DuplicataDTO duplicataDTO){
         Portador portador = portadorRepository.getOne(duplicataDTO.getPortador_id());
         Plano plano = planoRepository.getOne(duplicataDTO.getPlano_id());
@@ -95,11 +125,11 @@ public class DuplicataService {
             pessoa = pessoaRepository.getOne(duplicataDTO.getPessoa_id());
         } else {
             // se for informado somente o nome, é feita a busca pelo nome
-            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(duplicataDTO.getPessoaNome(), usuario);
+            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(duplicataDTO.getPessoa_nome(), usuario);
 
             // caso a pessoa não esteja cadastrada, é feito o cadastro
             if(pessoa == null) {
-                Pessoa pessoa1 = new Pessoa(null, duplicataDTO.getPessoaNome());
+                Pessoa pessoa1 = new Pessoa(null, duplicataDTO.getPessoa_nome());
                 pessoa1.setUsuario(usuario);
                 pessoa = pessoaRepository.save(pessoa1);
             }
