@@ -121,8 +121,8 @@ public class DuplicataService {
 
 
     public Duplicata fromDTO(DuplicataDTO duplicataDTO){
-        Portador portador = portadorRepository.getOne(duplicataDTO.getPortador_id());
-        Plano plano = planoRepository.getOne(duplicataDTO.getPlano_id());
+        Portador portador = portadorRepository.getOne(duplicataDTO.getPortadorId());
+        Plano plano = planoRepository.getOne(duplicataDTO.getPlanoId());
         if(portador == null) throw new ObjectNotFoundException("Portador não encontrado");
         if(plano == null) throw new ObjectNotFoundException("Conta não encontrada");
 
@@ -133,18 +133,18 @@ public class DuplicataService {
         Optional<Pessoa> pessoa = null;
 
         // se for informado o código da pessoa, o registro é buscado para ser vinculado a duplicata
-        if(duplicataDTO.getPessoa_id() != null){
-            Pessoa pessoa1 = pessoaRepository.getOne(duplicataDTO.getPessoa_id());
+        if(duplicataDTO.getPessoaId() != null){
+            Pessoa pessoa1 = pessoaRepository.getOne(duplicataDTO.getPessoaId());
             pessoa.get().setNome(pessoa1.getNome());
             pessoa.get().setId(pessoa1.getId());
             pessoa.get().setUsuario(pessoa1.getUsuario());
         } else {
             // se for informado somente o nome, é feita a busca pelo nome
-            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(duplicataDTO.getPessoa_nome(), usuario);
+            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(duplicataDTO.getPessoaNome(), usuario);
 
             // caso a pessoa não esteja cadastrada, é feito o cadastro
             if(pessoa == null) {
-                Pessoa pessoa1 = new Pessoa(null, duplicataDTO.getPessoa_nome());
+                Pessoa pessoa1 = new Pessoa(null, duplicataDTO.getPessoaNome());
                 pessoa1.setUsuario(usuario);
                 pessoa1 = pessoaRepository.save(pessoa1);
                 pessoa.get().setId(pessoa1.getId());

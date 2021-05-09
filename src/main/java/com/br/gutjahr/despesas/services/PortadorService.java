@@ -60,7 +60,7 @@ public class PortadorService {
     }
 
     public Portador fromDTO(PortadorDTO portadorDTO){
-        Plano plano = planoRepository.getOne(portadorDTO.getPlano_id());
+        Plano plano = planoRepository.getOne(portadorDTO.getPlanoId());
         return new Portador(portadorDTO.getId(), portadorDTO.getNome(), plano,portadorDTO.getCredito(), portadorDTO.getLimite());
     }
 }

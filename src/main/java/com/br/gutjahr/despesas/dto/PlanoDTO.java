@@ -8,16 +8,16 @@ public class PlanoDTO implements Serializable {
 
     private Integer id;
     @NotNull(message = "Informe o código contábil")
-    private String cod_contabil;
+    private String codContabil;
     @NotNull(message = "Informe o nome")
     private String nome;
     private boolean dre;
 
     public PlanoDTO(){}
 
-    public PlanoDTO(Integer id, String cod_contabil, String nome, boolean dre) {
+    public PlanoDTO(Integer id, String codContabil, String nome, boolean dre) {
         this.id = id;
-        this.cod_contabil = cod_contabil;
+        this.codContabil = codContabil;
         this.nome = nome;
         this.dre = dre;
     }
@@ -30,12 +30,16 @@ public class PlanoDTO implements Serializable {
         this.id = id;
     }
 
-    public String getCod_contabil() {
-        return cod_contabil;
+    public String getCodContabil() {
+        return codContabil;
     }
 
-    public void setCod_contabil(String cod_contabil) {
-        this.cod_contabil = cod_contabil;
+    public void setCodContabil(String codContabil) {
+        this.codContabil = codContabil;
+    }
+
+    public boolean isDre() {
+        return dre;
     }
 
     public String getNome() {

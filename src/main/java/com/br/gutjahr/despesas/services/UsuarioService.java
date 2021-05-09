@@ -36,7 +36,7 @@ public class UsuarioService {
         }
         usuario.setId(null);
         usuario.setSenha(pe.encode(usuario.getSenha()));
-        usuario.setDt_cadastro(new Date(System.currentTimeMillis()));
+        usuario.setDtCadastro(new Date(System.currentTimeMillis()));
         usuarioRepository.save(usuario);
         return usuario;
     }

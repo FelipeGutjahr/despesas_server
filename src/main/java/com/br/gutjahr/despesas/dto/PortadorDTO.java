@@ -10,16 +10,16 @@ public class PortadorDTO implements Serializable {
     @NotNull(message = "Informe o nome")
     private String nome;
     @NotNull(message = "Informe a conta do plano")
-    private Integer plano_id;
+    private Integer planoId;
     private Boolean credito = false;
     private Double limite = 0.0;
 
     public PortadorDTO(){}
 
-    public PortadorDTO(Integer id, String nome, Integer plano_id, Boolean credito, Double limite) {
+    public PortadorDTO(Integer id, String nome, Integer planoId, Boolean credito, Double limite) {
         this.id = id;
         this.nome = nome;
-        this.plano_id = plano_id;
+        this.planoId = planoId;
         this.credito = credito;
         this.limite = limite;
     }
@@ -40,12 +40,12 @@ public class PortadorDTO implements Serializable {
         this.nome = nome;
     }
 
-    public Integer getPlano_id() {
-        return plano_id;
+    public Integer getPlanoId() {
+        return planoId;
     }
 
-    public void setPlano_id(Integer plano_id) {
-        this.plano_id = plano_id;
+    public void setPlanoId(Integer planoId) {
+        this.planoId = planoId;
     }
 
     public Boolean getCredito() {

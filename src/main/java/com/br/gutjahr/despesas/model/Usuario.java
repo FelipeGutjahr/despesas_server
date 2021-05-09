@@ -22,7 +22,7 @@ public class Usuario implements Serializable {
     private String nome;
     private String email;
     @Column(columnDefinition = "DATE")
-    private Date dt_cadastro;
+    private Date dtCadastro;
 
     private Integer perfil;
 
@@ -89,12 +89,16 @@ public class Usuario implements Serializable {
         this.email = email;
     }
 
-    public Date getDt_cadastro() {
-        return dt_cadastro;
+    public Date getDtCadastro() {
+        return dtCadastro;
     }
 
-    public void setDt_cadastro(Date dt_cadastro) {
-        this.dt_cadastro = dt_cadastro;
+    public void setDtCadastro(Date dtCadastro) {
+        this.dtCadastro = dtCadastro;
+    }
+
+    public void setPerfil(Integer perfil) {
+        this.perfil = perfil;
     }
 
     public String getSenha() {
@@ -139,7 +143,7 @@ public class Usuario implements Serializable {
         builder.append(", E-mail: ");
         builder.append(getEmail());
         builder.append(", cadastrado em: ");
-        builder.append(sdf.format(getDt_cadastro()));
+        builder.append(sdf.format(getDtCadastro()));
         return builder.toString();
     }
 }

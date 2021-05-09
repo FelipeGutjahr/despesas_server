@@ -70,8 +70,8 @@ public class PlanoService {
     }
 
     public Plano fromDTO(PlanoDTO planoDTO){
-        return new Plano(planoDTO.getId(), planoDTO.getCod_contabil(), planoDTO.getNome(), planoDTO.getDre(),
-                getNivel(planoDTO.getCod_contabil()));
+        return new Plano(planoDTO.getId(), planoDTO.getCodContabil(), planoDTO.getNome(), planoDTO.getDre(),
+                getNivel(planoDTO.getCodContabil()));
     }
 
     private Integer getNivel(String codContabil){

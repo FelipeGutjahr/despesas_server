@@ -24,7 +24,7 @@ public class Lancamento implements Serializable {
     private Boolean faturado;
 
     @Transient
-    private Integer qtd_parcelas;
+    private Integer qtdParcelas;
 
     @JsonIgnore
     @ManyToOne
@@ -51,7 +51,7 @@ public class Lancamento implements Serializable {
     public Lancamento(){}
 
     public Lancamento(Integer id, Date data, Double valor, String historico, Plano plano_credito, Plano plano_debito,
-                      Boolean credito, Boolean faturado, Integer qtd_parcelas, Duplicata duplicata, Pessoa pessoa) {
+                      Boolean credito, Boolean faturado, Integer qtdParcelas, Duplicata duplicata, Pessoa pessoa) {
         this.id = id;
         this.data = data;
         this.valor = valor;
@@ -60,7 +60,7 @@ public class Lancamento implements Serializable {
         this.planoDebito = plano_debito;
         this.credito = credito;
         this.faturado = faturado;
-        this.qtd_parcelas = qtd_parcelas;
+        this.qtdParcelas = qtdParcelas;
         this.duplicata = duplicata;
         this.pessoa = pessoa;
     }
@@ -137,12 +137,12 @@ public class Lancamento implements Serializable {
         this.faturado = faturado;
     }
 
-    public Integer getQtd_parcelas() {
-        return qtd_parcelas;
+    public Integer getQtdParcelas() {
+        return qtdParcelas;
     }
 
-    public void setQtd_parcelas(Integer qtd_parcelas) {
-        this.qtd_parcelas = qtd_parcelas;
+    public void setQtdParcelas(Integer qtdParcelas) {
+        this.qtdParcelas = qtdParcelas;
     }
 
     public Plano getPlanoCredito() {

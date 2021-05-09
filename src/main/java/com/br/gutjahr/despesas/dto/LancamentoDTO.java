@@ -20,38 +20,38 @@ public class LancamentoDTO implements Serializable {
     @NotNull(message = "Informe o histórico")
     @Length(min = 5, max = 200, message = "Histórico deve conter entre 5 e 200 caracteres")
     private String historico;
-    private Boolean is_credito = false;
-    private Boolean is_parcelado = false;
-    private Integer qtd_parcelas = 0;
-    private Integer duplicata_id;
+    private Boolean isCredito = false;
+    private Boolean isParcelado = false;
+    private Integer qtdParcelas = 0;
+    private Integer duplicataId;
 
     @NotNull(message = "Informe a conta de débito")
-    private Integer plano_debito_id;
+    private Integer planoDebitoId;
 
     @NotNull(message = "Informe a conta de crédito")
-    private Integer plano_credito_id;
+    private Integer planoCreditoId;
 
     @NotNull(message = "Informe o nome da pessoa")
-    private String nome_pessoa;
-    private Integer pessoa_id;
+    private String nomePessoa;
+    private Integer pessoaId;
 
     public LancamentoDTO(){}
 
-    public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer plano_debito_id,
-                         Integer plano_credito_id, Boolean is_credito, Boolean is_parcelado, Integer qtd_parcelas,
-                         Integer duplicata_id, String nome_pessoa, Integer pessoa_id) {
+    public LancamentoDTO(Integer id, Date data, Double valor, String historico, Integer planoDebitoId,
+                         Integer planoCreditoId, Boolean isCredito, Boolean isParcelado, Integer qtdParcelas,
+                         Integer duplicataId, String nomePessoa, Integer pessoaId) {
         this.id = id;
         this.data = data;
         this.valor = valor;
         this.historico = historico;
-        this.plano_debito_id = plano_debito_id;
-        this.plano_credito_id = plano_credito_id;
-        this.is_credito = is_credito;
-        this.is_parcelado = is_parcelado;
-        this.qtd_parcelas = qtd_parcelas;
-        this.duplicata_id = duplicata_id;
-        this.nome_pessoa = nome_pessoa;
-        this.pessoa_id = pessoa_id;
+        this.planoDebitoId = planoDebitoId;
+        this.planoCreditoId = planoCreditoId;
+        this.isCredito = isCredito;
+        this.isParcelado = isParcelado;
+        this.qtdParcelas = qtdParcelas;
+        this.duplicataId = duplicataId;
+        this.nomePessoa = nomePessoa;
+        this.pessoaId = pessoaId;
     }
 
     public Integer getId() {
@@ -86,67 +86,67 @@ public class LancamentoDTO implements Serializable {
         this.historico = historico;
     }
 
-    public Integer getPlano_debito_id() {
-        return plano_debito_id;
+    public Boolean getCredito() {
+        return isCredito;
     }
 
-    public void setPlano_debito_id(Integer plano_debito_id) {
-        this.plano_debito_id = plano_debito_id;
+    public void setCredito(Boolean credito) {
+        isCredito = credito;
     }
 
-    public Integer getPlano_credito_id() {
-        return plano_credito_id;
+    public Boolean getParcelado() {
+        return isParcelado;
     }
 
-    public void setPlano_credito_id(Integer plano_credito_id) {
-        this.plano_credito_id = plano_credito_id;
+    public void setParcelado(Boolean parcelado) {
+        isParcelado = parcelado;
     }
 
-    public Boolean getIs_credito() {
-        return is_credito;
+    public Integer getQtdParcelas() {
+        return qtdParcelas;
     }
 
-    public void setIs_credito(Boolean is_credito) {
-        this.is_credito = is_credito;
+    public void setQtdParcelas(Integer qtdParcelas) {
+        this.qtdParcelas = qtdParcelas;
     }
 
-    public Boolean getIs_parcelado() {
-        return is_parcelado;
+    public Integer getDuplicataId() {
+        return duplicataId;
     }
 
-    public void setIs_parcelado(Boolean is_parcelado) {
-        this.is_parcelado = is_parcelado;
+    public void setDuplicataId(Integer duplicataId) {
+        this.duplicataId = duplicataId;
     }
 
-    public Integer getQtd_parcelas() {
-        return qtd_parcelas;
+    public Integer getPlanoDebitoId() {
+        return planoDebitoId;
     }
 
-    public void setQtd_parcelas(Integer qtd_parcelas) {
-        this.qtd_parcelas = qtd_parcelas;
+    public void setPlanoDebitoId(Integer planoDebitoId) {
+        this.planoDebitoId = planoDebitoId;
     }
 
-    public Integer getDuplicata_id() {
-        return duplicata_id;
+    public Integer getPlanoCreditoId() {
+        return planoCreditoId;
     }
 
-    public void setDuplicata_id(Integer duplicata_id) {
-        this.duplicata_id = duplicata_id;
+    public void setPlanoCreditoId(Integer planoCreditoId) {
+        this.planoCreditoId = planoCreditoId;
     }
 
-    public String getNome_pessoa() {
-        return nome_pessoa;
+    public String getNomePessoa() {
+        return nomePessoa;
     }
 
-    public void setNome_pessoa(String nome_pessoa) {
-        this.nome_pessoa = nome_pessoa;
+    public void setNomePessoa(String nomePessoa) {
+        this.nomePessoa = nomePessoa;
     }
 
-    public Integer getPessoa_id() {
-        return pessoa_id;
+    public Integer getPessoaId() {
+        return pessoaId;
     }
 
-    public void setPessoa_id(Integer pessoa_id) {
-        this.pessoa_id = pessoa_id;
+    public void setPessoaId(Integer pessoaId) {
+        this.pessoaId = pessoaId;
     }
 }

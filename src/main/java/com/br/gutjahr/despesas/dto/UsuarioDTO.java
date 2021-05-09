@@ -17,7 +17,7 @@ public class UsuarioDTO implements Serializable {
     private String nome;
     @Email(message = "E-mail inválido")
     private String email;
-    private Date dt_cadastro;
+    private Date dtCadastro;
 
     @NotNull(message = "Informe a senha")
     @Size(min = 6, message = "Senha muito curta, minimo de 6 caracteres")
@@ -25,11 +25,11 @@ public class UsuarioDTO implements Serializable {
 
     public UsuarioDTO(){}
 
-    public UsuarioDTO(Integer id, String nome, String email, Date dt_cadastro, String senha) {
+    public UsuarioDTO(Integer id, String nome, String email, Date dtCadastro, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.dt_cadastro = dt_cadastro;
+        this.dtCadastro = dtCadastro;
         this.senha = senha;
     }
 
@@ -57,12 +57,12 @@ public class UsuarioDTO implements Serializable {
         this.email = email;
     }
 
-    public Date getDt_cadastro() {
-        return dt_cadastro;
+    public Date getDtCadastro() {
+        return dtCadastro;
     }
 
-    public void setDt_cadastro(Date dt_cadastro) {
-        this.dt_cadastro = dt_cadastro;
+    public void setDtCadastro(Date dtCadastro) {
+        this.dtCadastro = dtCadastro;
     }
 
     public String getSenha() {

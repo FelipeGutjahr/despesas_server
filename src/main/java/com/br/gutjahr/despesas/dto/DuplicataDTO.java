@@ -22,27 +22,27 @@ public class DuplicataDTO implements Serializable {
     private String observacao;
     private Boolean receber;
 
-    private Integer portador_id;
-    private Integer plano_id;
+    private Integer portadorId;
+    private Integer planoId;
 
     @NotNull(message = "Informe o nome da pessoa")
-    private String pessoa_nome;
-    private Integer pessoa_id;
+    private String pessoaNome;
+    private Integer pessoaId;
 
     public DuplicataDTO() {}
 
     public DuplicataDTO(Integer id, Date dataInclusao, Date dataVencimento, Double valor, String observacao,
-                        Boolean receber, Integer portador_id, Integer plano_id, Integer pessoa_id, String pessoa_nome) {
+                        Boolean receber, Integer portadorId, Integer planoId, Integer pessoaId, String pessoaNome) {
         this.id = id;
         this.dataInclusao = dataInclusao;
         this.dataVencimento = dataVencimento;
         this.valor = valor;
         this.observacao = observacao;
         this.receber = receber;
-        this.portador_id = portador_id;
-        this.plano_id = plano_id;
-        this.pessoa_id = pessoa_id;
-        this.pessoa_nome = pessoa_nome;
+        this.portadorId = portadorId;
+        this.planoId = planoId;
+        this.pessoaId = pessoaId;
+        this.pessoaNome = pessoaNome;
     }
 
     public Integer getId() {
@@ -93,35 +93,35 @@ public class DuplicataDTO implements Serializable {
         this.receber = receber;
     }
 
-    public Integer getPortador_id() {
-        return portador_id;
+    public Integer getPortadorId() {
+        return portadorId;
     }
 
-    public void setPortador_id(Integer portador_id) {
-        this.portador_id = portador_id;
+    public void setPortadorId(Integer portadorId) {
+        this.portadorId = portadorId;
     }
 
-    public Integer getPlano_id() {
-        return plano_id;
+    public Integer getPlanoId() {
+        return planoId;
     }
 
-    public void setPlano_id(Integer plano_id) {
-        this.plano_id = plano_id;
+    public void setPlanoId(Integer planoId) {
+        this.planoId = planoId;
     }
 
-    public String getPessoa_nome() {
-        return pessoa_nome;
+    public String getPessoaNome() {
+        return pessoaNome;
     }
 
-    public void setPessoa_nome(String pessoa_nome) {
-        this.pessoa_nome = pessoa_nome;
+    public void setPessoaNome(String pessoaNome) {
+        this.pessoaNome = pessoaNome;
     }
 
-    public Integer getPessoa_id() {
-        return pessoa_id;
+    public Integer getPessoaId() {
+        return pessoaId;
     }
 
-    public void setPessoa_id(Integer pessoa_id) {
-        this.pessoa_id = pessoa_id;
+    public void setPessoaId(Integer pessoaId) {
+        this.pessoaId = pessoaId;
     }
 }
