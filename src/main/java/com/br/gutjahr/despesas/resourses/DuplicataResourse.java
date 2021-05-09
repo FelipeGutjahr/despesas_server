@@ -1,9 +1,7 @@
 package com.br.gutjahr.despesas.resourses;
 
 import com.br.gutjahr.despesas.dto.DuplicataDTO;
-import com.br.gutjahr.despesas.dto.PlanoDTO;
 import com.br.gutjahr.despesas.model.Duplicata;
-import com.br.gutjahr.despesas.model.Plano;
 import com.br.gutjahr.despesas.services.DuplicataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +51,11 @@ public class DuplicataResourse {
         duplicata.setId(id);
         duplicataService.update(duplicata);
         return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
+        duplicataService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

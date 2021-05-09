@@ -15,22 +15,23 @@ import java.util.Optional;
 public interface LancamentoRepository extends JpaRepository<Lancamento, Integer> {
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByUsuario(Usuario usuario);
+    Optional<List<Lancamento>> findByUsuario(Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByPlanoCreditoInAndDataAndPlanoDebitoNotInAndUsuario(Collection<Plano> planos1, Date data, Collection<Plano> planos2, Usuario usuario);
+    Optional<List<Lancamento>> findByPlanoCreditoInAndDataAndPlanoDebitoNotInAndUsuario(Collection<Plano> planos1, Date data, Collection<Plano> planos2, Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByPlanoDebitoInAndDataAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data, Collection<Plano> planos2, Usuario usuario);
+    Optional<List<Lancamento>> findByPlanoDebitoInAndDataAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data, Collection<Plano> planos2, Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
+    Optional<List<Lancamento>> findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
+    Optional<List<Lancamento>> findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotInAndUsuario(Collection<Plano> planos1, Date data1, Date data2, Collection<Plano> planos2, Usuario usuario);
 
     @Transactional(readOnly = true)
-    List<Lancamento> findByDataBetweenAndUsuario(Date data1, Date data2, Usuario usuario);
+    Optional<List<Lancamento>> findByDataBetweenAndUsuario(Date data1, Date data2, Usuario usuario);
 
+    @Transactional(readOnly = true)
     Optional<List<Lancamento>> findByDuplicata(Duplicata duplicata);
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LancamentoService {
@@ -35,8 +36,8 @@ public class LancamentoService {
             throw new ArithmeticException("Acesso negado");
         }
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        List<Lancamento> lancamentos = lancamentoRepository.findByUsuario(usuario);
-        return lancamentos;
+        Optional<List<Lancamento>> lancamentos = lancamentoRepository.findByUsuario(usuario);
+        return lancamentos.get();
     }
 
     public Lancamento insert(Lancamento lancamento){
@@ -85,11 +86,14 @@ public class LancamentoService {
         if(userSS == null) throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
 
-        Pessoa pessoa;
+        Optional<Pessoa> pessoa = null;
 
         // se for informado o código da pessoa, o registro é buscado para ser vinculado a duplicata
         if(lancamentoDTO.getPessoa_id() != null){
-            pessoa = pessoaRepository.getOne(lancamentoDTO.getPessoa_id());
+            Pessoa pessoa1 = pessoaRepository.getOne(lancamentoDTO.getPessoa_id());
+            pessoa.get().setNome(pessoa1.getNome());
+            pessoa.get().setId(pessoa1.getId());
+            pessoa.get().setUsuario(pessoa1.getUsuario());
         } else {
             // se for informado somente o nome, é feita a busca pelo nome
             pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(lancamentoDTO.getNome_pessoa(), usuario);
@@ -98,12 +102,15 @@ public class LancamentoService {
             if(pessoa == null) {
                 Pessoa pessoa1 = new Pessoa(null, lancamentoDTO.getNome_pessoa());
                 pessoa1.setUsuario(usuario);
-                pessoa = pessoaRepository.save(pessoa1);
+                pessoa1 = pessoaRepository.save(pessoa1);
+                pessoa.get().setId(pessoa1.getId());
+                pessoa.get().setNome(pessoa1.getNome());
+                pessoa.get().setUsuario(pessoa1.getUsuario());
             }
         }
 
         return new Lancamento(lancamentoDTO.getId(), lancamentoDTO.getData(), lancamentoDTO.getValor(),
                 lancamentoDTO.getHistorico(), planoCred, planoDeb, lancamentoDTO.getIs_credito(), false,
-                lancamentoDTO.getQtd_parcelas(), duplicata, pessoa);
+                lancamentoDTO.getQtd_parcelas(), duplicata, pessoa.get());
     }
 }

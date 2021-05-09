@@ -34,12 +34,12 @@ public class HomeService {
         List<Plano> planos = findPlanoFromPortador(usuario);
         Date dataAtual = new Date(System.currentTimeMillis());
 
-        List<Lancamento> lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataAndPlanoDebitoNotInAndUsuario(
+        Optional<List<Lancamento>> lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataAndPlanoDebitoNotInAndUsuario(
                 planos, dataAtual, planos, usuario);
 
         List<ItemCard> itemCardList = new ArrayList<>();
 
-        itemCardList.add(generateItemCard(lancamentos, "Hoje"));
+        itemCardList.add(generateItemCard(lancamentos.get(), "Hoje"));
 
         calendar.setTime(dataAtual);
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
@@ -49,7 +49,7 @@ public class HomeService {
 
         lancamentos = lancamentoRepository.findByPlanoCreditoInAndDataBetweenAndPlanoDebitoNotInAndUsuario(
                 planos, primeiroDiaMes, ultimoDiaMes, planos, usuario);
-        itemCardList.add(generateItemCard(lancamentos, "Este mês"));
+        itemCardList.add(generateItemCard(lancamentos.get(), "Este mês"));
 
         return itemCardList;
     }
@@ -60,12 +60,12 @@ public class HomeService {
         List<Plano> planos = findPlanoFromPortador(usuario);
         Date dataAtual = new Date(System.currentTimeMillis());
 
-        List<Lancamento> lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataAndPlanoCreditoNotInAndUsuario(
+        Optional<List<Lancamento>> lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataAndPlanoCreditoNotInAndUsuario(
                 planos, dataAtual, planos, usuario);
 
         List<ItemCard> itemCardList = new ArrayList<>();
 
-        itemCardList.add(generateItemCard(lancamentos, "Hoje"));
+        itemCardList.add(generateItemCard(lancamentos.get(), "Hoje"));
 
         calendar.setTime(dataAtual);
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
@@ -76,7 +76,7 @@ public class HomeService {
         lancamentos = lancamentoRepository.findByPlanoDebitoInAndDataBetweenAndPlanoCreditoNotInAndUsuario(
                 planos, primeiroDiaMes, ultimoDiaMes, planos, usuario);
 
-        itemCardList.add(generateItemCard(lancamentos, "Este mês"));
+        itemCardList.add(generateItemCard(lancamentos.get(), "Este mês"));
 
         return itemCardList;
     }
@@ -84,11 +84,11 @@ public class HomeService {
     public List<ItemCard> findSaldoPortadores(){
         Usuario usuario = findUsuario();
 
-        List<Portador> portadores = portadorRepository.findByUsuario(usuario);
+        Optional<List<Portador>> portadores = portadorRepository.findByUsuario(usuario);
 
         List<ItemCard> itemCardList = new ArrayList<>();
 
-        for (Portador portador : portadores) {
+        for (Portador portador : portadores.get()) {
             Date dataAtual = new Date(System.currentTimeMillis());
 
             ItemCard itemCard = new ItemCard(portador.getNome(), 0.0);
@@ -97,10 +97,10 @@ public class HomeService {
                     .findByDataAndPlanoId(dataAtual, portador.getPlano().getId());
 
             // se o plano saldo na data de hoje for nulo, busca o registro com a maior data
-            if(planoSaldo.isPresent()){
+            if(!planoSaldo.isPresent()){
                 planoSaldo = planoSaldoRepository
                         .findTopByDataBeforeAndPlanoIdOrderByDataDesc(dataAtual, portador.getPlano().getId());
-                if(!planoSaldo.isPresent()){
+                if(planoSaldo.isPresent()){
                     itemCard.setValue(planoSaldo.get().getSaldo());
                 }
             } else {
@@ -113,9 +113,9 @@ public class HomeService {
     }
 
     private List<Plano> findPlanoFromPortador(Usuario usuario){
-        List<Portador> portadores = portadorRepository.findByUsuario(usuario);
+        Optional<List<Portador>> portadores = portadorRepository.findByUsuario(usuario);
         List<Plano> planos = new ArrayList<>();
-        portadores.forEach(portador -> planos.add(portador.getPlano()));
+        portadores.get().forEach(portador -> planos.add(portador.getPlano()));
         return planos;
     }
 

@@ -7,21 +7,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface DuplicataRepository extends JpaRepository<Duplicata, Integer> {
 
     @Transactional(readOnly = true)
-    List<Duplicata> findByUsuario(Usuario usuario);
+    Optional<List<Duplicata>> findByUsuario(Usuario usuario);
 
     // duplicatas a receber e a pagar
     @Transactional(readOnly = true)
-    List<Duplicata> findByDataInclusaoBetweenAndSaldoNotAndUsuarioOrderByDataVencimento(Date dataInicial, Date dataFinal, Double saldo, Usuario usuario);
+    Optional<List<Duplicata>> findByDataInclusaoBetweenAndSaldoNotAndUsuarioOrderByDataVencimento(Date dataInicial, Date dataFinal, Double saldo, Usuario usuario);
 
     // duplicatas a pagar
     @Transactional(readOnly = true)
-    List<Duplicata> findByDataInclusaoBetweenAndSaldoNotAndReceberFalseAndUsuarioOrderByDataVencimento(Date dataInicial, Date dataFinal, Double saldo, Usuario usuario);
+    Optional<List<Duplicata>> findByDataInclusaoBetweenAndSaldoNotAndReceberFalseAndUsuarioOrderByDataVencimento(Date dataInicial, Date dataFinal, Double saldo, Usuario usuario);
 
     // duplicatas a receber
     @Transactional(readOnly = true)
-    List<Duplicata> findByDataInclusaoBetweenAndSaldoNotAndReceberTrueAndUsuarioOrderByDataVencimento(Date dataInicial, Date dataFinal, Double saldo, Usuario usuario);
+    Optional<List<Duplicata>> findByDataInclusaoBetweenAndSaldoNotAndReceberTrueAndUsuarioOrderByDataVencimento(Date dataInicial, Date dataFinal, Double saldo, Usuario usuario);
 }

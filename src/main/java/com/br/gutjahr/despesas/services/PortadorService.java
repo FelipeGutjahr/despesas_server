@@ -8,10 +8,13 @@ import com.br.gutjahr.despesas.repositories.PlanoRepository;
 import com.br.gutjahr.despesas.repositories.PortadorRepository;
 import com.br.gutjahr.despesas.repositories.UsuarioRepository;
 import com.br.gutjahr.despesas.security.UserSS;
+import com.br.gutjahr.despesas.services.exceptions.DataIntegrityExeption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PortadorService {
@@ -31,8 +34,8 @@ public class PortadorService {
             throw new ArithmeticException("Acesso negado");
         }
         Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        List<Portador> portadores = portadorRepository.findByUsuario(usuario);
-        return portadores;
+        Optional<List<Portador>> portadores = portadorRepository.findByUsuario(usuario);
+        return portadores.get();
     }
 
     public Portador insert(Portador portador){
@@ -45,6 +48,15 @@ public class PortadorService {
         portador.setUsuario(usuario);
         portadorRepository.save(portador);
         return portador;
+    }
+
+    public void delete(Integer id){
+        try {
+            Portador portador = portadorRepository.getOne(id);
+            portadorRepository.delete(portador);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityExeption("Ocorreu um erro no servidor");
+        }
     }
 
     public Portador fromDTO(PortadorDTO portadorDTO){
