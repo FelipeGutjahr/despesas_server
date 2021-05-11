@@ -36,8 +36,7 @@ public class PortadorService {
         Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
         portador.setId(null);
         portador.setUsuario(usuario.get());
-        portadorRepository.save(portador);
-        return portador;
+        return portadorRepository.save(portador);
     }
 
     public void delete(Integer id){
@@ -49,9 +48,15 @@ public class PortadorService {
         }
     }
 
+    public Portador update(Portador portador){
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        portador.setUsuario(usuario.get());
+        return portadorRepository.save(portador);
+    }
+
     public Portador fromDTO(PortadorDTO portadorDTO){
         Optional<Plano> plano = Optional.ofNullable(planoRepository.getOne(portadorDTO.getPlanoId()));
         return new Portador(portadorDTO.getId(), portadorDTO.getNome(), plano.get(), portadorDTO.getCredito(),
-                portadorDTO.getLimite(), portadorDTO.getDataFechamento());
+                portadorDTO.getLimite(), portadorDTO.getDiaFechamento());
     }
 }

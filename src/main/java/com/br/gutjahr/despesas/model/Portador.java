@@ -18,9 +18,7 @@ public class Portador implements Serializable {
     private String nome;
     private boolean credito;
     private Double limite;
-    @Column(columnDefinition = "DATE")
-    @Temporal(TemporalType.DATE)
-    private Date dataFechamento;
+    private Integer diaFechamento;
 
     @ManyToOne
     @JoinColumn(name = "plano_id")
@@ -33,13 +31,13 @@ public class Portador implements Serializable {
 
     public Portador() {}
 
-    public Portador(Integer id, String nome, Plano plano, boolean credito, Double limite, Date dataFechamento) {
+    public Portador(Integer id, String nome, Plano plano, boolean credito, Double limite, Integer diaFechamento) {
         this.id = id;
         this.nome = nome;
         this.plano = plano;
         this.credito = credito;
         this.limite = limite;
-        this.dataFechamento = dataFechamento;
+        this.diaFechamento = diaFechamento;
     }
 
     public Integer getId() {
@@ -90,11 +88,11 @@ public class Portador implements Serializable {
         this.limite = limite;
     }
 
-    public Date getDataFechamento() {
-        return dataFechamento;
+    public Integer getDiaFechamento() {
+        return diaFechamento;
     }
 
-    public void setDataFechamento(Date dataFechamento) {
-        this.dataFechamento = dataFechamento;
+    public void setDiaFechamento(Integer diaFechamento) {
+        this.diaFechamento = diaFechamento;
     }
 }

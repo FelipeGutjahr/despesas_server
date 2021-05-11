@@ -24,7 +24,7 @@ public class HomeService {
     private PortadorRepository portadorRepository;
 
     @Autowired
-    private PlanoSaldoRepository planoSaldoRepository;
+    private PlanoService planoService;
 
     Calendar calendar = Calendar.getInstance();
 
@@ -93,19 +93,9 @@ public class HomeService {
 
             ItemCard itemCard = new ItemCard(portador.getNome(), 0.0);
 
-            Optional<PlanoSaldo> planoSaldo = planoSaldoRepository
-                    .findByDataAndPlanoId(dataAtual, portador.getPlano().getId());
+            PlanoSaldo planoSaldo = planoService.findSaldo(dataAtual, portador.getPlano().getId());
+            itemCard.setValue(planoSaldo.getSaldo());
 
-            // se o plano saldo na data de hoje for nulo, busca o registro com a maior data
-            if(!planoSaldo.isPresent()){
-                planoSaldo = planoSaldoRepository
-                        .findTopByDataBeforeAndPlanoIdOrderByDataDesc(dataAtual, portador.getPlano().getId());
-                if(planoSaldo.isPresent()){
-                    itemCard.setValue(planoSaldo.get().getSaldo());
-                }
-            } else {
-                itemCard.setValue(planoSaldo.get().getSaldo());
-            }
             itemCardList.add(itemCard);
         }
 

@@ -60,8 +60,10 @@ public class DuplicataResourse {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/baixar", method = RequestMethod.POST)
-    public ResponseEntity<Void> baixar(@Valid @RequestBody BaixaDuplicataDTO baixaDuplicataDTO){
+    @RequestMapping(value = "/baixar/{id}", method = RequestMethod.POST)
+    public ResponseEntity<Void> baixar(@Valid @RequestBody BaixaDuplicataDTO baixaDuplicataDTO,
+                                       @PathVariable Integer id){
+        baixaDuplicataDTO.setDuplicataId(id);
         duplicataService.baixar(baixaDuplicataDTO);
         return ResponseEntity.ok().build();
     }

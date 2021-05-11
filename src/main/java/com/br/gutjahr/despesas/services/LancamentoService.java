@@ -3,13 +3,14 @@ package com.br.gutjahr.despesas.services;
 import com.br.gutjahr.despesas.dto.LancamentoDTO;
 import com.br.gutjahr.despesas.model.*;
 import com.br.gutjahr.despesas.repositories.*;
-import com.br.gutjahr.despesas.security.UserSS;
 import com.br.gutjahr.despesas.services.exceptions.ObjectNotFoundException;
-import org.aspectj.weaver.patterns.PerObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,22 @@ public class LancamentoService {
         Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
         Optional<List<Lancamento>> lancamentos = Optional.ofNullable(lancamentoRepository
                 .findByUsuario(usuario.get()).get());
+        return lancamentos.get();
+    }
+
+    public List<Lancamento> findBetweenLancamentos(String dataInicial, String dataFinal){
+        Date dataI = new Date();
+        Date dataF = new Date();
+        try {
+            dataI = new SimpleDateFormat("yyyy-MM-dd").parse(dataInicial);
+            dataF = new SimpleDateFormat("yyyy-MM-dd").parse(dataFinal);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Optional<List<Lancamento>> lancamentos = Optional.ofNullable(lancamentoRepository
+                .findByDataBetweenAndUsuario(dataI, dataF, usuario.get())).get();
         return lancamentos.get();
     }
 

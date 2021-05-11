@@ -5,10 +5,7 @@ import com.br.gutjahr.despesas.model.Lancamento;
 import com.br.gutjahr.despesas.services.LancamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -25,6 +22,15 @@ public class LancamentoResourse {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> findAll(){
         List<Lancamento> lancamentoList = lancamentoService.findAll();
+        return ResponseEntity.ok().body(lancamentoList);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/periodo")
+    public ResponseEntity<?> findBetweenLancamentos(
+            @RequestParam(value = "dataInicial") String dataInicial,
+            @RequestParam(value = "dataFinal") String dataFinal
+    ){
+        List<Lancamento> lancamentoList = lancamentoService.findBetweenLancamentos(dataInicial, dataFinal);
         return ResponseEntity.ok().body(lancamentoList);
     }
 

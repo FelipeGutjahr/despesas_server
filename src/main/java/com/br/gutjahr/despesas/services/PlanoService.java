@@ -6,8 +6,6 @@ import com.br.gutjahr.despesas.model.PlanoSaldo;
 import com.br.gutjahr.despesas.model.Usuario;
 import com.br.gutjahr.despesas.repositories.PlanoRepository;
 import com.br.gutjahr.despesas.repositories.PlanoSaldoRepository;
-import com.br.gutjahr.despesas.repositories.UsuarioRepository;
-import com.br.gutjahr.despesas.security.UserSS;
 import com.br.gutjahr.despesas.services.exceptions.DataIntegrityExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +23,25 @@ public class PlanoService {
     @Autowired
     private PlanoRepository planoRepository;
 
+    @Autowired
+    private PlanoSaldoRepository planoSaldoRepository;
+
     public List<Plano> findAll(){
         Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
         Optional<List<Plano>> planos = planoRepository.findByUsuarioOrderByCodContabil(usuario.get());
         return planos.orElse(null);
+    }
+
+    public PlanoSaldo findSaldo(Date data, Integer plano_id){
+        // busca o plano saldo na data informada
+        Optional<PlanoSaldo> planoSaldo = Optional.ofNullable(planoSaldoRepository.findByDataAndPlanoId(data, plano_id))
+                .get();
+        // se o plano saldo na data informada não for encontrado, busca o registro com a maior data
+        if(!planoSaldo.isPresent()){
+            planoSaldo = planoSaldoRepository.findTopByDataBeforeAndPlanoIdOrderByDataDesc(data, plano_id);
+        }
+        // caso não seja encontardo um saldo para a conta é retornado saldo 0
+        return planoSaldo.orElse(new PlanoSaldo(data, 0.0));
     }
 
     public Plano insert(Plano plano){

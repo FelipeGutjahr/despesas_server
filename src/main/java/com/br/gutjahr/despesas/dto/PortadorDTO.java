@@ -1,10 +1,7 @@
 package com.br.gutjahr.despesas.dto;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 
 public class PortadorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -16,18 +13,17 @@ public class PortadorDTO implements Serializable {
     private Integer planoId;
     private Boolean credito = false;
     private Double limite = 0.0;
-    @Temporal(TemporalType.DATE)
-    private Date dataFechamento;
+    private Integer diaFechamento;
 
     public PortadorDTO(){}
 
-    public PortadorDTO(Integer id, String nome, Integer planoId, Boolean credito, Double limite, Date dataFechamento) {
+    public PortadorDTO(Integer id, String nome, Integer planoId, Boolean credito, Double limite, Integer diaFechamento) {
         this.id = id;
         this.nome = nome;
         this.planoId = planoId;
         this.credito = credito;
         this.limite = limite;
-        this.dataFechamento = dataFechamento;
+        this.diaFechamento = diaFechamento;
     }
 
     public Integer getId() {
@@ -70,11 +66,11 @@ public class PortadorDTO implements Serializable {
         this.limite = limite;
     }
 
-    public Date getDataFechamento() {
-        return dataFechamento;
+    public Integer getDiaFechamento() {
+        return diaFechamento;
     }
 
-    public void setDataFechamento(Date dataFechamento) {
-        this.dataFechamento = dataFechamento;
+    public void setDiaFechamento(Integer diaFechamento) {
+        this.diaFechamento = diaFechamento;
     }
 }

@@ -24,9 +24,12 @@ public class Lancamento implements Serializable {
     private String historico;
     private Boolean credito;
     private Boolean faturado;
+    @JsonIgnore
     private Integer mesLancamento;
+    @JsonIgnore
     private Integer anoLancamento;
 
+    // anotação para não criar esse campo no banco de dados
     @Transient
     private Integer qtdParcelas;
 
