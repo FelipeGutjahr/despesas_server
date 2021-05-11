@@ -1,5 +1,6 @@
 package com.br.gutjahr.despesas.services;
 
+import com.br.gutjahr.despesas.dto.BaixaDuplicataDTO;
 import com.br.gutjahr.despesas.dto.DuplicataDTO;
 import com.br.gutjahr.despesas.model.*;
 import com.br.gutjahr.despesas.repositories.*;
@@ -35,6 +36,9 @@ public class DuplicataService {
 
     @Autowired
     private LancamentoRepository lancamentoRepository;
+
+    @Autowired
+    private LancamentoService lancamentoService;
 
     public List<Duplicata> findAll(){
         Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
@@ -100,6 +104,45 @@ public class DuplicataService {
         }
     }
 
+    public void baixar(BaixaDuplicataDTO baixaDuplicataDTO){
+
+        // busca a duplicata que está sendo paga
+        Optional<Duplicata> duplicata = Optional.ofNullable(duplicataRepository.getOne(baixaDuplicataDTO
+                .getDuplicataId()));
+
+        if(!duplicata.isPresent()){
+            throw new ObjectNotFoundException("Duplicata não encontrada");
+        }
+
+        // se a pessoa que pagou a duplicata é diferenta a que gerou, então busca o cadastro ou cadastra
+        Pessoa pessoa;
+        if(baixaDuplicataDTO.getPessoaId() != null || baixaDuplicataDTO.getPessoaNome() != null) {
+            pessoa = pessoaService.findPessoa(baixaDuplicataDTO.getPessoaNome(), baixaDuplicataDTO.getPessoaId());
+        } else {
+            pessoa = duplicata.get().getPessoa();
+        }
+
+        // gera o historico para o lançamento de baixa
+        String historico = "Baixa duplicata '" + duplicata.get().getObservacao() + "', R$ "
+                + duplicata.get().getValor() + ", cód. pessoa: " + duplicata.get().getPessoa().getId();
+
+        // atribui a conta credito e debito para o lançamento
+        Plano planoCredito;
+        Plano planoDebito;
+        if(duplicata.get().getReceber()){
+            planoDebito = duplicata.get().getPortador().getPlano();
+            planoCredito = duplicata.get().getPlano();
+        } else {
+            planoCredito = duplicata.get().getPortador().getPlano();
+            planoDebito = duplicata.get().getPlano();
+        }
+
+        Lancamento lancamento = new Lancamento(null, baixaDuplicataDTO.getData(), baixaDuplicataDTO.getValor(),
+                historico, planoCredito, planoDebito, baixaDuplicataDTO.getCredito(), false,
+                baixaDuplicataDTO.getQtdParcelas(), duplicata.get(), pessoa, null, null);
+
+        lancamentoService.insert(lancamento);
+    }
 
     public Duplicata fromDTO(DuplicataDTO duplicataDTO){
         Portador portador = portadorRepository.getOne(duplicataDTO.getPortadorId());

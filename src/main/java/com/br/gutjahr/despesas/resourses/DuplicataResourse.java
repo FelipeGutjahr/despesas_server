@@ -1,5 +1,6 @@
 package com.br.gutjahr.despesas.resourses;
 
+import com.br.gutjahr.despesas.dto.BaixaDuplicataDTO;
 import com.br.gutjahr.despesas.dto.DuplicataDTO;
 import com.br.gutjahr.despesas.model.Duplicata;
 import com.br.gutjahr.despesas.services.DuplicataService;
@@ -56,6 +57,12 @@ public class DuplicataResourse {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         duplicataService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/baixar", method = RequestMethod.POST)
+    public ResponseEntity<Void> baixar(@Valid @RequestBody BaixaDuplicataDTO baixaDuplicataDTO){
+        duplicataService.baixar(baixaDuplicataDTO);
+        return ResponseEntity.ok().build();
     }
 }
