@@ -16,18 +16,17 @@ import java.util.Optional;
 public class UsuarioService {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private BCryptPasswordEncoder pe;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
     
     public Usuario find(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null){
-            throw new ArithmeticException("Acesso negado");
-        }
-        Optional<Usuario> usuario = usuarioRepository.findById(userSS.getId());
-        return usuario.orElse(null);
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        return usuario.get();
     }
 
     public Usuario insert(Usuario usuario){

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface PlanoRepository extends JpaRepository<Plano, Integer> {
 
     @Transactional(readOnly = true)
-    Optional<Plano> findByCodContabilAndUsuarioId(String cod_contabil, Integer usuario_id);
+    Optional<Plano> findByCodContabilAndUsuario(String cod_contabil, Usuario usuario);
 
     @Transactional(readOnly = true)
     Optional<List<Plano>> findByUsuarioOrderByCodContabil(Usuario usuario);

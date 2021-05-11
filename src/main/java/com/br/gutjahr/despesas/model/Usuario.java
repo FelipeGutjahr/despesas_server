@@ -2,6 +2,7 @@ package com.br.gutjahr.despesas.model;
 
 import com.br.gutjahr.despesas.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 

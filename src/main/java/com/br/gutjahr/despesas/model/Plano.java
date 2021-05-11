@@ -1,6 +1,7 @@
 package com.br.gutjahr.despesas.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Plano implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -62,12 +64,12 @@ public class Plano implements Serializable {
         this.id = id;
     }
 
-    public String getCod_contabil() {
+    public String getCodContabil() {
         return codContabil;
     }
 
-    public void setCod_contabil(String cod_contabil) {
-        this.codContabil = cod_contabil;
+    public void setCodContabil(String codContabil) {
+        this.codContabil = codContabil;
     }
 
     public String getNome() {
@@ -108,7 +110,7 @@ public class Plano implements Serializable {
         builder.append("Código: ");
         builder.append(getId());
         builder.append(", Código contábil: ");
-        builder.append(getCod_contabil());
+        builder.append(getCodContabil());
         builder.append(", Nome: ");
         builder.append(getNome());
         return builder.toString();

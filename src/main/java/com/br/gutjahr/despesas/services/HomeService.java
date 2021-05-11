@@ -15,7 +15,7 @@ import java.util.*;
 public class HomeService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UserService userService;
 
     @Autowired
     private LancamentoRepository lancamentoRepository;
@@ -128,10 +128,6 @@ public class HomeService {
     }
 
     private Usuario findUsuario(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null){
-            throw new ArithmeticException("Acesso negado");
-        }
-        return usuarioRepository.getOne(userSS.getId());
+        return Optional.ofNullable(userService.authencated().get()).get();
     }
 }

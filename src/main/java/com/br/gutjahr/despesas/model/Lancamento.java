@@ -1,6 +1,7 @@
 package com.br.gutjahr.despesas.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Lancamento implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -22,6 +24,8 @@ public class Lancamento implements Serializable {
     private String historico;
     private Boolean credito;
     private Boolean faturado;
+    private Integer mesLancamento;
+    private Integer anoLancamento;
 
     @Transient
     private Integer qtdParcelas;
@@ -51,7 +55,8 @@ public class Lancamento implements Serializable {
     public Lancamento(){}
 
     public Lancamento(Integer id, Date data, Double valor, String historico, Plano plano_credito, Plano plano_debito,
-                      Boolean credito, Boolean faturado, Integer qtdParcelas, Duplicata duplicata, Pessoa pessoa) {
+                      Boolean credito, Boolean faturado, Integer qtdParcelas, Duplicata duplicata, Pessoa pessoa,
+                      Integer mesLancamento, Integer anoLancamento) {
         this.id = id;
         this.data = data;
         this.valor = valor;
@@ -63,6 +68,8 @@ public class Lancamento implements Serializable {
         this.qtdParcelas = qtdParcelas;
         this.duplicata = duplicata;
         this.pessoa = pessoa;
+        this.mesLancamento = mesLancamento;
+        this.anoLancamento = anoLancamento;
     }
 
     public Integer getId() {
@@ -175,6 +182,22 @@ public class Lancamento implements Serializable {
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
+    }
+
+    public Integer getMesLancamento() {
+        return mesLancamento;
+    }
+
+    public void setMesLancamento(Integer mesLancamento) {
+        this.mesLancamento = mesLancamento;
+    }
+
+    public Integer getAnoLancamento() {
+        return anoLancamento;
+    }
+
+    public void setAnoLancamento(Integer anoLancamento) {
+        this.anoLancamento = anoLancamento;
     }
 
     @Override

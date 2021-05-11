@@ -5,6 +5,7 @@ import com.br.gutjahr.despesas.model.*;
 import com.br.gutjahr.despesas.repositories.*;
 import com.br.gutjahr.despesas.security.UserSS;
 import com.br.gutjahr.despesas.services.exceptions.ObjectNotFoundException;
+import org.aspectj.weaver.patterns.PerObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,13 @@ import java.util.Optional;
 public class LancamentoService {
 
     @Autowired
-    private LancamentoRepository lancamentoRepository;
+    private UserService userService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private PessoaService pessoaService;
+
+    @Autowired
+    private LancamentoRepository lancamentoRepository;
 
     @Autowired
     private PlanoRepository planoRepository;
@@ -27,90 +31,58 @@ public class LancamentoService {
     @Autowired
     private DuplicataRepository duplicataRepository;
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
-
     public List<Lancamento> findAll(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) {
-            throw new ArithmeticException("Acesso negado");
-        }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        Optional<List<Lancamento>> lancamentos = lancamentoRepository.findByUsuario(usuario);
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Optional<List<Lancamento>> lancamentos = Optional.ofNullable(lancamentoRepository
+                .findByUsuario(usuario.get()).get());
         return lancamentos.get();
     }
 
     public Lancamento insert(Lancamento lancamento){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null){
-            throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
-        }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(lancamento.getData());
         lancamento.setId(null);
-        lancamento.setUsuario(usuario);
+        lancamento.setUsuario(usuario.get());
         // se a quantidade de parcelas for maior que 1, serão gerados lançamentos de acordo com as parcelas
         if(lancamento.getQtdParcelas() > 1){
             lancamento.setValor(lancamento.getValor()/lancamento.getQtdParcelas());
             for(int i=0;i<lancamento.getQtdParcelas();i++){
                 // cada parcela ficará em um mês
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(lancamento.getData());
                 calendar.add(Calendar.MONTH, i);
                 Lancamento lancamento1 = new Lancamento(null, calendar.getTime(), lancamento.getValor(),
                         lancamento.getHistorico(), lancamento.getPlano_credito(), lancamento.getPlano_debito(),
                         lancamento.getCredito(), lancamento.getFaturado(), lancamento.getQtdParcelas(),
-                        lancamento.getDuplicata(), lancamento.getPessoa());
-                lancamento1.setUsuario(usuario);
+                        lancamento.getDuplicata(), lancamento.getPessoa(), calendar.get(Calendar.MONTH) + 1,
+                        calendar.get(Calendar.YEAR));
+                lancamento1.setUsuario(usuario.get());
                 lancamentoRepository.save(lancamento1);
             }
         } else {
+            lancamento.setMesLancamento(calendar.get(Calendar.MONTH) + 1);
+            lancamento.setAnoLancamento(calendar.get(Calendar.YEAR));
             lancamentoRepository.save(lancamento);
         }
         return lancamento;
     }
 
     public Lancamento fromDTO(LancamentoDTO lancamentoDTO){
-        Plano planoCred = planoRepository.getOne(lancamentoDTO.getPlanoCreditoId());
-        Plano planoDeb = planoRepository.getOne(lancamentoDTO.getPlanoDebitoId());
-        Duplicata duplicata;
-        if(planoCred == null) throw new ObjectNotFoundException("Conta de crédito não encontrada");
-        if(planoDeb == null) throw new ObjectNotFoundException("Conta de débito não encontrada");
+        Optional<Plano> planoCred = Optional.ofNullable(planoRepository.getOne(lancamentoDTO.getPlanoCreditoId()));
+        Optional<Plano> planoDeb = Optional.ofNullable(planoRepository.getOne(lancamentoDTO.getPlanoDebitoId()));
 
+        if(!planoCred.isPresent()) throw new ObjectNotFoundException("Conta de crédito não encontrada");
+        if(!planoDeb.isPresent()) throw new ObjectNotFoundException("Conta de débito não encontrada");
+
+        Optional<Duplicata> duplicata = Optional.empty();
         if(lancamentoDTO.getDuplicataId() != null) {
-            duplicata = duplicataRepository.getOne(lancamentoDTO.getDuplicataId());
-        } else {
-            duplicata = null;
+            duplicata = Optional.ofNullable(duplicataRepository.getOne(lancamentoDTO.getDuplicataId()));
         }
 
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
-
-        Optional<Pessoa> pessoa = null;
-
-        // se for informado o código da pessoa, o registro é buscado para ser vinculado a duplicata
-        if(lancamentoDTO.getPessoaId() != null){
-            Pessoa pessoa1 = pessoaRepository.getOne(lancamentoDTO.getPessoaId());
-            pessoa.get().setNome(pessoa1.getNome());
-            pessoa.get().setId(pessoa1.getId());
-            pessoa.get().setUsuario(pessoa1.getUsuario());
-        } else {
-            // se for informado somente o nome, é feita a busca pelo nome
-            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(lancamentoDTO.getNomePessoa(), usuario);
-
-            // caso a pessoa não esteja cadastrada, é feito o cadastro
-            if(pessoa == null) {
-                Pessoa pessoa1 = new Pessoa(null, lancamentoDTO.getNomePessoa());
-                pessoa1.setUsuario(usuario);
-                pessoa1 = pessoaRepository.save(pessoa1);
-                pessoa.get().setId(pessoa1.getId());
-                pessoa.get().setNome(pessoa1.getNome());
-                pessoa.get().setUsuario(pessoa1.getUsuario());
-            }
-        }
+        Pessoa pessoa = pessoaService.findPessoa(lancamentoDTO.getNomePessoa(), lancamentoDTO.getPessoaId());
 
         return new Lancamento(lancamentoDTO.getId(), lancamentoDTO.getData(), lancamentoDTO.getValor(),
-                lancamentoDTO.getHistorico(), planoCred, planoDeb, lancamentoDTO.getCredito(), false,
-                lancamentoDTO.getQtdParcelas(), duplicata, pessoa.get());
+                lancamentoDTO.getHistorico(), planoCred.get(), planoDeb.get(), lancamentoDTO.getCredito(), false,
+                lancamentoDTO.getQtdParcelas(), duplicata.orElse(null), pessoa, null,
+                null);
     }
 }

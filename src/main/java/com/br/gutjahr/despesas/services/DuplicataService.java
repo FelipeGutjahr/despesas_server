@@ -3,7 +3,6 @@ package com.br.gutjahr.despesas.services;
 import com.br.gutjahr.despesas.dto.DuplicataDTO;
 import com.br.gutjahr.despesas.model.*;
 import com.br.gutjahr.despesas.repositories.*;
-import com.br.gutjahr.despesas.security.UserSS;
 import com.br.gutjahr.despesas.services.exceptions.DataIntegrityExeption;
 import com.br.gutjahr.despesas.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,12 @@ import java.util.Optional;
 public class DuplicataService {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PessoaService pessoaService;
+
+    @Autowired
     private DuplicataRepository duplicataRepository;
 
     @Autowired
@@ -29,26 +34,16 @@ public class DuplicataService {
     private PlanoRepository planoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PessoaRepository pessoaRepository;
-
-    @Autowired
     private LancamentoRepository lancamentoRepository;
 
     public List<Duplicata> findAll(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) throw new ArrayStoreException("Acesso negado");
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        Optional<List<Duplicata>> duplicatas = duplicataRepository.findByUsuario(usuario);
-        return duplicatas.orElse(null);
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Optional<List<Duplicata>> duplicatas = Optional.ofNullable(duplicataRepository.findByUsuario(usuario.get()).get());
+        return duplicatas.get();
     }
 
     public List<Duplicata> findByFilters(String dataInicial, String dataFinal, Boolean receber, Boolean pagar){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) throw new ArrayStoreException("Acesso negado");
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
         Date dataI = new Date();
         Date dataF = new Date();
         try {
@@ -62,58 +57,44 @@ public class DuplicataService {
         if(dataF == null) dataF = new Date(System.currentTimeMillis());
 
         // a lista precisa conter algum valor inicialmente para poder utilizar o get
-        Optional<List<Duplicata>> duplicatas = null;
+        Optional<List<Duplicata>> duplicatas = Optional.empty();
         if(receber && pagar) {
-            duplicatas = duplicataRepository.findByDataInclusaoBetweenAndSaldoNotAndUsuarioOrderByDataVencimento(dataI, dataF, 0.0, usuario);
+            duplicatas = duplicataRepository.findByDataInclusaoBetweenAndSaldoNotAndUsuarioOrderByDataVencimento(dataI, dataF, 0.0, usuario.get());
         } else if (receber) {
-            duplicatas = duplicataRepository.findByDataInclusaoBetweenAndSaldoNotAndReceberTrueAndUsuarioOrderByDataVencimento(dataI, dataF, 0.0, usuario);
+            duplicatas = duplicataRepository.findByDataInclusaoBetweenAndSaldoNotAndReceberTrueAndUsuarioOrderByDataVencimento(dataI, dataF, 0.0, usuario.get());
         } else if (pagar) {
-            duplicatas = duplicataRepository.findByDataInclusaoBetweenAndSaldoNotAndReceberFalseAndUsuarioOrderByDataVencimento(dataI, dataF, 0.0, usuario);
+            duplicatas = duplicataRepository.findByDataInclusaoBetweenAndSaldoNotAndReceberFalseAndUsuarioOrderByDataVencimento(dataI, dataF, 0.0, usuario.get());
         }
         return duplicatas.get();
     }
 
 
     public Duplicata insert(Duplicata duplicata) {
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
         duplicata.setId(null);
-        duplicata.setUsuario(usuario);
+        duplicata.setUsuario(usuario.get());
         duplicataRepository.save(duplicata);
         return duplicata;
     }
 
     public Duplicata update(Duplicata duplicata){
-        Duplicata newDuplicata = duplicataRepository.getOne(duplicata.getId());
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        duplicata.setUsuario(usuario.get());
+        Optional<Duplicata> duplicataAtual = Optional.ofNullable(duplicataRepository.getOne(duplicata.getId()));
 
         // valida se a duplicata possí baixas e se está sendo alterado o valor
-        if(!lancamentoRepository.findByDuplicata(newDuplicata).get().isEmpty()
-                && duplicata.getValor() != newDuplicata.getValor() ){
-            System.out.println(lancamentoRepository.findByDuplicata(newDuplicata));
-            throw new DataIntegrityExeption("A duplicata possuí baixas, exclua as baixas antes de alterar o valor");
-        }
+        if(!lancamentoRepository.findByDuplicata(duplicataAtual.get()).get().isEmpty()
+                && duplicata.getValor() != duplicataAtual.get().getValor())
+            throw new DataIntegrityExeption("A duplicata possuí baixas, exclua as baixas antes de alterar " +
+                    "o valor");
 
-        // se a data de inclusão não foi informada, é sem recebimento previsto
-        if(duplicata.getDataVencimento() == null) newDuplicata.setDataVencimento(null);
-        else newDuplicata.setDataVencimento(duplicata.getDataVencimento());
-
-        newDuplicata.setDataInclusao(duplicata.getDataInclusao());
-        newDuplicata.setValor(duplicata.getValor());
-        newDuplicata.setSaldo(duplicata.getSaldo());
-        newDuplicata.setObservacao(duplicata.getObservacao());
-        newDuplicata.setReceber(duplicata.getReceber());
-        newDuplicata.setPortador(duplicata.getPortador());
-        newDuplicata.setPlano(duplicata.getPlano());
-        newDuplicata.setPessoa(duplicata.getPessoa());
-
-        return duplicataRepository.save(newDuplicata);
+        return duplicataRepository.save(duplicata);
     }
 
     public void delete(Integer id){
         try {
-            Duplicata duplicata = duplicataRepository.getOne(id);
-            duplicataRepository.delete(duplicata);
+            Optional<Duplicata> duplicata = Optional.ofNullable(duplicataRepository.getOne(id));
+            duplicataRepository.delete(duplicata.get());
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityExeption("Ocorreu um erro no servidor");
         }
@@ -126,35 +107,10 @@ public class DuplicataService {
         if(portador == null) throw new ObjectNotFoundException("Portador não encontrado");
         if(plano == null) throw new ObjectNotFoundException("Conta não encontrada");
 
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
-
-        Optional<Pessoa> pessoa = null;
-
-        // se for informado o código da pessoa, o registro é buscado para ser vinculado a duplicata
-        if(duplicataDTO.getPessoaId() != null){
-            Pessoa pessoa1 = pessoaRepository.getOne(duplicataDTO.getPessoaId());
-            pessoa.get().setNome(pessoa1.getNome());
-            pessoa.get().setId(pessoa1.getId());
-            pessoa.get().setUsuario(pessoa1.getUsuario());
-        } else {
-            // se for informado somente o nome, é feita a busca pelo nome
-            pessoa = pessoaRepository.findFirst1ByNomeAndUsuario(duplicataDTO.getPessoaNome(), usuario);
-
-            // caso a pessoa não esteja cadastrada, é feito o cadastro
-            if(pessoa == null) {
-                Pessoa pessoa1 = new Pessoa(null, duplicataDTO.getPessoaNome());
-                pessoa1.setUsuario(usuario);
-                pessoa1 = pessoaRepository.save(pessoa1);
-                pessoa.get().setId(pessoa1.getId());
-                pessoa.get().setNome(pessoa1.getNome());
-                pessoa.get().setUsuario(pessoa1.getUsuario());
-            }
-        }
+        Pessoa pessoa = pessoaService.findPessoa(duplicataDTO.getPessoaNome(), duplicataDTO.getPessoaId());
 
         return new Duplicata(duplicataDTO.getId(), duplicataDTO.getDataInclusao(), duplicataDTO.getDataVencimento(),
                 duplicataDTO.getValor(), duplicataDTO.getObservacao(), duplicataDTO.getReceber(), portador, plano,
-                duplicataDTO.getValor(), pessoa.get());
+                duplicataDTO.getValor(), pessoa);
     }
 }

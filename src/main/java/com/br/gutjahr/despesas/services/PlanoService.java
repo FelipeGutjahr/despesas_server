@@ -20,50 +20,39 @@ import java.util.Optional;
 public class PlanoService {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private PlanoRepository planoRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PlanoSaldoRepository planoSaldoRepository;
-
     public List<Plano> findAll(){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) {
-            throw new ArithmeticException("Acesso negado");
-        }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
-        Optional<List<Plano>> planos = planoRepository.findByUsuarioOrderByCodContabil(usuario);
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Optional<List<Plano>> planos = planoRepository.findByUsuarioOrderByCodContabil(usuario.get());
         return planos.orElse(null);
     }
 
     public Plano insert(Plano plano){
-        UserSS userSS = UserService.authencated();
-        if(userSS == null) {
-            throw new ArrayStoreException("Ocorreu um erro ao obter o código do usuário");
-        }
-        Optional<Plano> plano1 = planoRepository.findByCodContabilAndUsuarioId(plano.getCod_contabil(), userSS.getId());
-        if(plano1 != null) {
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Optional<Plano> plano1 = Optional.ofNullable(planoRepository.findByCodContabilAndUsuario(plano.getCodContabil(),
+                usuario.get())).get();
+        if(plano1.isPresent()) {
             throw new DataIntegrityExeption("Código contábil já cadastrado");
         }
-        Usuario usuario = usuarioRepository.getOne(userSS.getId());
         plano.setId(null);
-        plano.setUsuario(usuario);
-        for(int i=1;i<plano.getCod_contabil().length();i++){
+        plano.setUsuario(usuario.get());
+        for(int i=1;i<plano.getCodContabil().length();i++){
             plano.setNome(' ' + plano.getNome());
         }
-        planoRepository.save(plano);
-        return plano;
+        return planoRepository.save(plano);
     }
 
     public Plano update(Plano plano){
         Plano newPlano = planoRepository.getOne(plano.getId());
-        newPlano.setCod_contabil(plano.getCod_contabil());
+        newPlano.setCodContabil(plano.getCodContabil());
         newPlano.setNome(plano.getNome());
         newPlano.setDre(plano.getDre());
         newPlano.setNivel(plano.getNivel());
-        for(int i=1;i<plano.getCod_contabil().length();i++){
+        for(int i=1;i<plano.getCodContabil().length();i++){
             newPlano.setNome(' ' + newPlano.getNome());
         }
         return planoRepository.save(newPlano);

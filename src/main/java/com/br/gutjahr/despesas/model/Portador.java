@@ -1,11 +1,14 @@
 package com.br.gutjahr.despesas.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Portador implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -15,6 +18,9 @@ public class Portador implements Serializable {
     private String nome;
     private boolean credito;
     private Double limite;
+    @Column(columnDefinition = "DATE")
+    @Temporal(TemporalType.DATE)
+    private Date dataFechamento;
 
     @ManyToOne
     @JoinColumn(name = "plano_id")
@@ -27,12 +33,13 @@ public class Portador implements Serializable {
 
     public Portador() {}
 
-    public Portador(Integer id, String nome, Plano plano, boolean credito, Double limite) {
+    public Portador(Integer id, String nome, Plano plano, boolean credito, Double limite, Date dataFechamento) {
         this.id = id;
         this.nome = nome;
         this.plano = plano;
         this.credito = credito;
         this.limite = limite;
+        this.dataFechamento = dataFechamento;
     }
 
     public Integer getId() {
@@ -81,5 +88,13 @@ public class Portador implements Serializable {
 
     public void setLimite(Double limite) {
         this.limite = limite;
+    }
+
+    public Date getDataFechamento() {
+        return dataFechamento;
+    }
+
+    public void setDataFechamento(Date dataFechamento) {
+        this.dataFechamento = dataFechamento;
     }
 }
