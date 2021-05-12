@@ -55,6 +55,28 @@ public class LancamentoService {
         return lancamentos.get();
     }
 
+    public List<Lancamento> findBetweenLancamentosAndPlanoId(String dataInicial, String dataFinal, Integer planoId){
+        Date dataI = new Date();
+        Date dataF = new Date();
+        try {
+            dataI = new SimpleDateFormat("yyyy-MM-dd").parse(dataInicial);
+            dataF = new SimpleDateFormat("yyyy-MM-dd").parse(dataFinal);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Optional<Plano> plano = Optional.ofNullable(planoRepository.getOne(planoId));
+
+        Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
+        Optional<List<Lancamento>> lancamentos = Optional.ofNullable(lancamentoRepository
+                .findByDataBetweenAndUsuarioAndPlanoCredito(dataI, dataF, usuario.get(), plano.get()).get());
+
+        lancamentos.get().addAll(Optional.ofNullable(lancamentoRepository
+                .findByDataBetweenAndUsuarioAndPlanoDebito(dataI, dataF, usuario.get(), plano.get()).get()).get());
+
+        return lancamentos.get();
+    }
+
     public Lancamento insert(Lancamento lancamento){
         Optional<Usuario> usuario = Optional.ofNullable(userService.authencated().get());
         Calendar calendar = Calendar.getInstance();
@@ -68,7 +90,7 @@ public class LancamentoService {
                 // cada parcela ficará em um mês
                 calendar.add(Calendar.MONTH, i);
                 Lancamento lancamento1 = new Lancamento(null, calendar.getTime(), lancamento.getValor(),
-                        lancamento.getHistorico(), lancamento.getPlano_credito(), lancamento.getPlano_debito(),
+                        lancamento.getHistorico(), lancamento.getPlanoCredito(), lancamento.getPlanoDebito(),
                         lancamento.getCredito(), lancamento.getFaturado(), lancamento.getQtdParcelas(),
                         lancamento.getDuplicata(), lancamento.getPessoa(), calendar.get(Calendar.MONTH) + 1,
                         calendar.get(Calendar.YEAR));

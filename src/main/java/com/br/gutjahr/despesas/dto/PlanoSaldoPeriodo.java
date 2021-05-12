@@ -12,7 +12,7 @@ public class PlanoSaldoPeriodo implements Serializable {
     private Double saldoInicial;
     private Double saldoFinal;
 
-    private List<Lancamento> lancamentoList = new ArrayList<>();
+    private List<Lancamento> lancamentos = new ArrayList<>();
 
     public PlanoSaldoPeriodo() {}
 
@@ -37,11 +37,11 @@ public class PlanoSaldoPeriodo implements Serializable {
         this.saldoFinal = saldoFinal;
     }
 
-    public List<Lancamento> getLancamentoList() {
-        return lancamentoList;
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
     }
 
-    public void setLancamentoList(List<Lancamento> lancamentoList) {
-        this.lancamentoList = lancamentoList;
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
     }
 }

@@ -34,4 +34,10 @@ public interface LancamentoRepository extends JpaRepository<Lancamento, Integer>
 
     @Transactional(readOnly = true)
     Optional<List<Lancamento>> findByDuplicata(Duplicata duplicata);
+
+    @Transactional(readOnly = true)
+    Optional<List<Lancamento>> findByDataBetweenAndUsuarioAndPlanoCredito(Date data1, Date data2, Usuario usuario, Plano plano);
+
+    @Transactional(readOnly = true)
+    Optional<List<Lancamento>> findByDataBetweenAndUsuarioAndPlanoDebito(Date data1, Date data2, Usuario usuario, Plano plano);
 }

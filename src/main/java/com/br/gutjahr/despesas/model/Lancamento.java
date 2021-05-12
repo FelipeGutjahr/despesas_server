@@ -31,6 +31,7 @@ public class Lancamento implements Serializable {
 
     // anotação para não criar esse campo no banco de dados
     @Transient
+    @JsonIgnore
     private Integer qtdParcelas;
 
     @JsonIgnore
@@ -107,30 +108,6 @@ public class Lancamento implements Serializable {
         this.historico = historico;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Plano getPlano_credito() {
-        return planoCredito;
-    }
-
-    public void setPlano_credito(Plano plano_credito) {
-        this.planoCredito = plano_credito;
-    }
-
-    public Plano getPlano_debito() {
-        return planoDebito;
-    }
-
-    public void setPlano_debito(Plano plano_debito) {
-        this.planoDebito = plano_debito;
-    }
-
     public Boolean getCredito() {
         return credito;
     }
@@ -147,12 +124,36 @@ public class Lancamento implements Serializable {
         this.faturado = faturado;
     }
 
+    public Integer getMesLancamento() {
+        return mesLancamento;
+    }
+
+    public void setMesLancamento(Integer mesLancamento) {
+        this.mesLancamento = mesLancamento;
+    }
+
+    public Integer getAnoLancamento() {
+        return anoLancamento;
+    }
+
+    public void setAnoLancamento(Integer anoLancamento) {
+        this.anoLancamento = anoLancamento;
+    }
+
     public Integer getQtdParcelas() {
         return qtdParcelas;
     }
 
     public void setQtdParcelas(Integer qtdParcelas) {
         this.qtdParcelas = qtdParcelas;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Plano getPlanoCredito() {
@@ -185,22 +186,6 @@ public class Lancamento implements Serializable {
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
-    }
-
-    public Integer getMesLancamento() {
-        return mesLancamento;
-    }
-
-    public void setMesLancamento(Integer mesLancamento) {
-        this.mesLancamento = mesLancamento;
-    }
-
-    public Integer getAnoLancamento() {
-        return anoLancamento;
-    }
-
-    public void setAnoLancamento(Integer anoLancamento) {
-        this.anoLancamento = anoLancamento;
     }
 
     @Override
