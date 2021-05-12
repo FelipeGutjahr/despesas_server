@@ -14,22 +14,21 @@ public class BaixaDuplicataDTO implements Serializable {
     private Date data;
     @NotNull(message = "Informe o valor")
     private Double valor;
-    private Boolean isCredito = false;
-    private Boolean isParcelado = false;
+    private Boolean credito = false;
+    private Boolean parcelado = false;
     private Integer qtdParcelas = 0;
-    @NotNull(message = "Informe o código da duplicata")
     private Integer duplicataId;
     private Integer pessoaId;
     private String pessoaNome;
 
     public BaixaDuplicataDTO(){}
 
-    public BaixaDuplicataDTO(Date data, Double valor, Boolean isCredito, Boolean isParcelado, Integer qtdParcelas,
+    public BaixaDuplicataDTO(Date data, Double valor, Boolean credito, Boolean parcelado, Integer qtdParcelas,
                              Integer duplicataId, Integer pessoaId, String pessoaNome) {
         this.data = data;
         this.valor = valor;
-        this.isCredito = isCredito;
-        this.isParcelado = isParcelado;
+        this.credito = credito;
+        this.parcelado = parcelado;
         this.qtdParcelas = qtdParcelas;
         this.duplicataId = duplicataId;
         this.pessoaId = pessoaId;
@@ -53,19 +52,19 @@ public class BaixaDuplicataDTO implements Serializable {
     }
 
     public Boolean getCredito() {
-        return isCredito;
+        return credito;
     }
 
     public void setCredito(Boolean credito) {
-        isCredito = credito;
+        this.credito = credito;
     }
 
     public Boolean getParcelado() {
-        return isParcelado;
+        return parcelado;
     }
 
     public void setParcelado(Boolean parcelado) {
-        isParcelado = parcelado;
+        this.parcelado = parcelado;
     }
 
     public Integer getQtdParcelas() {
