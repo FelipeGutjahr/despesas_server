@@ -42,4 +42,10 @@ public class LancamentoResourse {
                 .path("/{id}").buildAndExpand(lancamento.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
+        lancamentoService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }

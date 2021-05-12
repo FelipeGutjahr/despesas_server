@@ -3,8 +3,10 @@ package com.br.gutjahr.despesas.services;
 import com.br.gutjahr.despesas.dto.LancamentoDTO;
 import com.br.gutjahr.despesas.model.*;
 import com.br.gutjahr.despesas.repositories.*;
+import com.br.gutjahr.despesas.services.exceptions.DataIntegrityExeption;
 import com.br.gutjahr.despesas.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -103,6 +105,15 @@ public class LancamentoService {
             lancamentoRepository.save(lancamento);
         }
         return lancamento;
+    }
+
+    public void delete(Integer id){
+        try {
+            Optional<Lancamento> lancamento = Optional.ofNullable(lancamentoRepository.getOne(id));
+            lancamentoRepository.delete(lancamento.get());
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityExeption("Ocorreu um erro no servidor");
+        }
     }
 
     public Lancamento fromDTO(LancamentoDTO lancamentoDTO){
